@@ -6,6 +6,7 @@ import repository.AuthorRepository;
 import repository.BookRepository;
 import repository.InMemoryAuthorRepository;
 import repository.InMemoryBookRepository;
+import webapp.resolver.BookFieldResolver;
 
 @Configuration
 public class GraphQLConfig {
@@ -17,5 +18,11 @@ public class GraphQLConfig {
     @Bean
     public AuthorRepository authorRepository() {
         return new InMemoryAuthorRepository();
+    }
+
+
+    @Bean
+    public BookFieldResolver bookFieldResolver(AuthorRepository authorRepository) {
+        return new BookFieldResolver(authorRepository);
     }
 }
