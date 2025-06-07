@@ -1,0 +1,13 @@
+
+# loan calculator
+
+POST {{host}}/api/loan/calculate
+Content-Type: application/json
+Accept: application/json
+
+{
+  "repaymentMethod": "FRENCH",
+  "totalAmount": "115000",
+  "interestRate": "1.2",
+  "numberOfInstallments": 360
+}

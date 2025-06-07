@@ -1,0 +1,8 @@
+services:
+  app:
+    image: davide92/graphql-example
+    container_name: app
+    restart:
+      always
+    ports:
+      - "8080:8080"
