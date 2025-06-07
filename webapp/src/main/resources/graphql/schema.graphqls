@@ -1,0 +1,26 @@
+```graphql
+type Book {
+    id: ID!
+    title: String!
+    description: String!
+    author: Author!
+}
+
+type Author {
+    id: ID!
+    name: String!
+    surname: String!
+    dateOfBirth: String!
+}
+
+type Query {
+    getBookById(id: ID!): Book
+    getBookByTitle(title: String!): Book
+    getAuthorById(id: ID!): Author
+    getAuthorByName(name: String!): Author
+}
+
+type Mutation {
+    createBook(title: String!, description: String!, authorName: String!): Book
+    createAuthor(name: String!, surname: String!, dateOfBirth: String!): Author
+}
