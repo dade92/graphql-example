@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import repository.AuthorRepository;
 import repository.BookRepository;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -51,6 +52,16 @@ public class BookGraphQLController {
         return bookRepository.findByTitle(title)
             .orElseThrow(() -> new IllegalArgumentException("Book not found with title: " + title));
     }
+
+    @QueryMapping
+    public List<Book> getBooksByAuthor(@Argument UUID authorId) {
+        Optional<Author> authorOpt = authorRepository.findById(authorId);
+        if (authorOpt.isEmpty()) {
+            throw new IllegalArgumentException("Author not found: " + authorId);
+        }
+        return bookRepository.findByAuthor(authorOpt.get());
+    }
+
 
 }
 

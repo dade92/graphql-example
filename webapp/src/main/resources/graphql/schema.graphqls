@@ -3,6 +3,7 @@ type Query {
     getBookByTitle(title: String!): Book
     getAuthorById(id: ID!): Author
     getAuthorByName(name: String!): Author
+    getBooksByAuthor(authorId: ID!): [Book!]!
 }
 
 type Mutation {
