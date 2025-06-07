@@ -33,11 +33,11 @@ public class BookGraphQLController {
         @Argument String description,
         @Argument String authorName
     ) {
-        Optional<Author> authorOpt = authorRepository.findByName(authorName);
-        if (authorOpt.isEmpty()) {
+        Optional<Author> author = authorRepository.findByName(authorName);
+        if (author.isEmpty()) {
             throw new IllegalArgumentException("Author not found: " + authorName);
         }
-        Book book = new Book(UUID.randomUUID(), title, description, authorOpt.get());
+        Book book = new Book(UUID.randomUUID(), title, description, author.get());
         return bookRepository.save(book);
     }
 
@@ -55,11 +55,11 @@ public class BookGraphQLController {
 
     @QueryMapping
     public List<Book> getBooksByAuthor(@Argument UUID authorId) {
-        Optional<Author> authorOpt = authorRepository.findById(authorId);
-        if (authorOpt.isEmpty()) {
+        Optional<Author> author = authorRepository.findById(authorId);
+        if (author.isEmpty()) {
             throw new IllegalArgumentException("Author not found: " + authorId);
         }
-        return bookRepository.findByAuthor(authorOpt.get());
+        return bookRepository.findByAuthor(author.get());
     }
 
 

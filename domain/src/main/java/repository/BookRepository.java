@@ -15,5 +15,4 @@ public interface BookRepository {
     Optional<Book> findByTitle(String title);
 
     List<Book> findByAuthor(Author author);
-
 }

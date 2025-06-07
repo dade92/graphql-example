@@ -1,0 +1,17 @@
+type Book {
+    id: ID!
+    title: String!
+    description: String!
+    author: Author!
+}
+
+extend type Query {
+    getBookById(id: ID!): Book
+    getBookByTitle(title: String!): Book
+    getBooksByAuthor(authorId: ID!): [Book!]!
+}
+
+extend type Mutation {
+    createBook(title: String!, description: String!, authorName: String!): Book
+}
+
