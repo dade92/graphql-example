@@ -2,13 +2,13 @@ package repository;
 
 import data.Author;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
 
 public class InMemoryAuthorRepository implements AuthorRepository {
-    private final Map<UUID, Author> authors = new ConcurrentHashMap<>();
+    private final Map<UUID, Author> authors = new HashMap<>();
 
     @Override
     public Author save(Author author) {
