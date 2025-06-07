@@ -27,16 +27,6 @@ public class BookGraphQLController {
     }
 
     @MutationMapping
-    public Author createAuthor(
-        @Argument String name,
-        @Argument String surname,
-        @Argument String dateOfBirth
-    ) {
-        Author author = new Author(UUID.randomUUID(), name, surname, dateOfBirth);
-        return authorRepository.save(author);
-    }
-
-    @MutationMapping
     public Book createBook(
         @Argument String title,
         @Argument String description,
@@ -62,16 +52,5 @@ public class BookGraphQLController {
             .orElseThrow(() -> new IllegalArgumentException("Book not found with title: " + title));
     }
 
-    @QueryMapping
-    public Author getAuthorById(@Argument UUID id) {
-        return authorRepository.findById(id)
-            .orElseThrow(() -> new IllegalArgumentException("Author not found with id: " + id));
-    }
-
-    @QueryMapping
-    public Author getAuthorByName(@Argument String name) {
-        return authorRepository.findByName(name)
-            .orElseThrow(() -> new IllegalArgumentException("Author not found with name: " + name));
-    }
 }
 
