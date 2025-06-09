@@ -12,13 +12,11 @@ public class BookFieldResolver {
     private final AuthorRepository authorRepository;
 
     public BookFieldResolver(AuthorRepository authorRepository) {
-        System.out.println("BookFieldResolver constructor");
         this.authorRepository = authorRepository;
     }
 
     @SchemaMapping(typeName = "Book", field = "author")
     public Author author(Book book) {
-        System.out.println("Resolving author for book: " + book.id());
         return authorRepository.findById(book.authorId())
             .orElseThrow(() -> new RuntimeException("Author not found: " + book.authorId()));
     }

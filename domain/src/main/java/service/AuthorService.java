@@ -5,6 +5,7 @@ import repository.AuthorRepository;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Optional;
 import java.util.UUID;
 
 public class AuthorService {
@@ -16,6 +17,11 @@ public class AuthorService {
     }
 
     public Author createAuthor(String name, String surname, String dateOfBirth) {
+        Optional<Author> existingAuthor = authorRepository.findByName(name);
+        if (existingAuthor.isPresent()) {
+            throw new ExistingAuthorException("Author named " + name + " already exists");
+        }
+
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         LocalDate date = LocalDate.parse(dateOfBirth, formatter);
         Author author = new Author(UUID.randomUUID(), name, surname, date);
