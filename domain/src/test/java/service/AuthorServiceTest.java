@@ -21,7 +21,8 @@ public class AuthorServiceTest {
 
     public static final String NAME = "John";
     public static final String SURNAME = "Doe";
-    public static final String DATE_OF_BIRTH = "15/06/1980";
+    public static final String DATE_OF_BIRTH_INPUT = "15/06/1980";
+    public static final LocalDate DATE_OF_BIRTH = LocalDate.of(1980, 6, 15);
 
     @Mock
     private AuthorRepository authorRepository;
@@ -39,39 +40,30 @@ public class AuthorServiceTest {
     @Test
     public void createAuthor() {
         UUID generatedId = UUID.randomUUID();
-        Author author = new Author(generatedId, NAME, SURNAME, LocalDate.of(1980, 6, 15));
+        Author author = new Author(generatedId, NAME, SURNAME, DATE_OF_BIRTH);
 
         when(authorRepository.findByName(NAME)).thenReturn(Optional.empty());
         when(authorIdProvider.getBookId()).thenReturn(generatedId);
-
         when(authorRepository.save(author)).thenReturn(author);
 
-        Author result = authorService.createAuthor(NAME, SURNAME, DATE_OF_BIRTH);
-
-        verify(authorRepository).findByName(NAME);
-        verify(authorIdProvider).getBookId();
-        verify(authorRepository).save(author);
+        Author result = authorService.createAuthor(NAME, SURNAME, DATE_OF_BIRTH_INPUT);
 
         assertEquals(author, result);
     }
 
     @Test
     public void createAuthorButAlreadyExists() {
-        String name = "Jane";
-        String surname = "Smith";
-        String dob = "01/01/1990";
-        Author existing = new Author(UUID.randomUUID(), name, surname, LocalDate.of(1990, 1, 1));
+        Author existingAuthor = new Author(UUID.randomUUID(), NAME, SURNAME, DATE_OF_BIRTH);
 
-        when(authorRepository.findByName(name)).thenReturn(Optional.of(existing));
+        when(authorRepository.findByName(NAME)).thenReturn(Optional.of(existingAuthor));
 
         ExistingAuthorException exception = assertThrows(
             ExistingAuthorException.class,
-            () -> authorService.createAuthor(name, surname, dob)
+            () -> authorService.createAuthor(NAME, SURNAME, DATE_OF_BIRTH_INPUT)
         );
 
-        assertEquals("Author named Jane already exists", exception.getMessage());
+        assertEquals("Author named John already exists", exception.getMessage());
 
-        verify(authorRepository).findByName(name);
         verify(authorRepository, never()).save(any());
         verifyNoInteractions(authorIdProvider);
     }
@@ -79,7 +71,7 @@ public class AuthorServiceTest {
     @Test
     public void getById() {
         UUID id = UUID.randomUUID();
-        Author author = new Author(id, "name", "surname", LocalDate.of(2000, 1, 1));
+        Author author = new Author(id, NAME, SURNAME, DATE_OF_BIRTH);
         when(authorRepository.findById(id)).thenReturn(Optional.of(author));
 
         Author result = authorService.getAuthorById(id);
@@ -99,11 +91,10 @@ public class AuthorServiceTest {
 
     @Test
     public void getByNameHappyPath() {
-        String name = "Emily";
-        Author author = new Author(UUID.randomUUID(), name, "Bronte", LocalDate.of(1818, 7, 30));
-        when(authorRepository.findByName(name)).thenReturn(Optional.of(author));
+        Author author = new Author(UUID.randomUUID(), NAME, SURNAME, DATE_OF_BIRTH);
+        when(authorRepository.findByName(NAME)).thenReturn(Optional.of(author));
 
-        Author result = authorService.getAuthorByName(name);
+        Author result = authorService.getAuthorByName(NAME);
 
         assertEquals(author, result);
     }
