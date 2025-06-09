@@ -3,10 +3,10 @@ package webapp.resolver;
 import data.Author;
 import data.Book;
 import org.springframework.graphql.data.method.annotation.SchemaMapping;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Controller;
 import repository.AuthorRepository;
 
-@Component
+@Controller
 public class BookFieldResolver {
 
     private final AuthorRepository authorRepository;
