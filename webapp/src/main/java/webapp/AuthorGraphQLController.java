@@ -5,19 +5,19 @@ import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.stereotype.Controller;
-import repository.AuthorRepository;
+import service.AuthorService;
 
 import java.util.UUID;
 
 @Controller
 public class AuthorGraphQLController {
 
-    private final AuthorRepository authorRepository;
+    private final AuthorService authorService;
 
     public AuthorGraphQLController(
-        AuthorRepository authorRepository
+        AuthorService authorService
     ) {
-        this.authorRepository = authorRepository;
+        this.authorService = authorService;
     }
 
     @MutationMapping
@@ -26,20 +26,17 @@ public class AuthorGraphQLController {
         @Argument String surname,
         @Argument String dateOfBirth
     ) {
-        Author author = new Author(UUID.randomUUID(), name, surname, dateOfBirth);
-        return authorRepository.save(author);
+        return authorService.createAuthor(name, surname, dateOfBirth);
     }
 
     @QueryMapping
     public Author getAuthorById(@Argument UUID id) {
-        return authorRepository.findById(id)
-            .orElseThrow(() -> new IllegalArgumentException("Author not found with id: " + id));
+        return authorService.getAuthorById(id);
     }
 
     @QueryMapping
     public Author getAuthorByName(@Argument String name) {
-        return authorRepository.findByName(name)
-            .orElseThrow(() -> new IllegalArgumentException("Author not found with name: " + name));
+        return authorService.getAuthorByName(name);
     }
 }
 

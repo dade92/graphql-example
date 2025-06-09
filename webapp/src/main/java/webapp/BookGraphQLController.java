@@ -58,4 +58,3 @@ public class BookGraphQLController {
         return bookRepository.findByAuthor(authorId);
     }
 }
-
