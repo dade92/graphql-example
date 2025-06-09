@@ -22,20 +22,20 @@ public class AuthorGraphQLController {
 
     @MutationMapping
     public Author createAuthor(
-        @Argument String name,
-        @Argument String surname,
-        @Argument String dateOfBirth
+        @Argument("name") String name,
+        @Argument("surname") String surname,
+        @Argument("dateOfBirth") String dateOfBirth
     ) {
         return authorService.createAuthor(name, surname, dateOfBirth);
     }
 
     @QueryMapping
-    public Author getAuthorById(@Argument UUID id) {
+    public Author getAuthorById(@Argument("id") UUID id) {
         return authorService.getAuthorById(id);
     }
 
     @QueryMapping
-    public Author getAuthorByName(@Argument String name) {
+    public Author getAuthorByName(@Argument("id") String name) {
         return authorService.getAuthorByName(name);
     }
 }
