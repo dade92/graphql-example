@@ -19,6 +19,10 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 public class AuthorServiceTest {
 
+    public static final String NAME = "John";
+    public static final String SURNAME = "Doe";
+    public static final String DATE_OF_BIRTH = "15/06/1980";
+
     @Mock
     private AuthorRepository authorRepository;
 
@@ -34,20 +38,17 @@ public class AuthorServiceTest {
 
     @Test
     public void createAuthor() {
-        String name = "John";
-        String surname = "Doe";
-        String dob = "15/06/1980";
         UUID generatedId = UUID.randomUUID();
-        Author author = new Author(generatedId, name, surname, LocalDate.of(1980, 6, 15));
+        Author author = new Author(generatedId, NAME, SURNAME, LocalDate.of(1980, 6, 15));
 
-        when(authorRepository.findByName(name)).thenReturn(Optional.empty());
+        when(authorRepository.findByName(NAME)).thenReturn(Optional.empty());
         when(authorIdProvider.getBookId()).thenReturn(generatedId);
 
         when(authorRepository.save(author)).thenReturn(author);
 
-        Author result = authorService.createAuthor(name, surname, dob);
+        Author result = authorService.createAuthor(NAME, SURNAME, DATE_OF_BIRTH);
 
-        verify(authorRepository).findByName(name);
+        verify(authorRepository).findByName(NAME);
         verify(authorIdProvider).getBookId();
         verify(authorRepository).save(author);
 
