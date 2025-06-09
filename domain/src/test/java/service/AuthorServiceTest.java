@@ -18,7 +18,6 @@ import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class AuthorServiceTest {
-
     public static final String NAME = "John";
     public static final String SURNAME = "Doe";
     public static final String DATE_OF_BIRTH_INPUT = "15/06/1980";
