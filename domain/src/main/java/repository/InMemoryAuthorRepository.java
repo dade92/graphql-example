@@ -23,7 +23,8 @@ public class InMemoryAuthorRepository implements AuthorRepository {
 
     @Override
     public Optional<Author> findByName(String name) {
-        return authors.values().stream()
+        return authors
+            .values().stream()
             .filter(author -> author.name().equalsIgnoreCase(name))
             .findFirst();
     }
