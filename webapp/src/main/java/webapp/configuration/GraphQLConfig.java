@@ -20,9 +20,4 @@ public class GraphQLConfig {
         return new InMemoryAuthorRepository();
     }
 
-
-    @Bean
-    public BookFieldResolver bookFieldResolver(AuthorRepository authorRepository) {
-        return new BookFieldResolver(authorRepository);
-    }
 }

@@ -37,7 +37,7 @@ public class BookGraphQLController {
         if (author.isEmpty()) {
             throw new IllegalArgumentException("Author not found: " + authorName);
         }
-        Book book = new Book(UUID.randomUUID(), title, description);
+        Book book = new Book(UUID.randomUUID(), title, description, author.get().getId());
         return bookRepository.save(book);
     }
 
