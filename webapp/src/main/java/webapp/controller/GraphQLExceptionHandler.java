@@ -1,4 +1,4 @@
-package webapp;
+package webapp.controller;
 
 import graphql.GraphQLError;
 import graphql.GraphqlErrorBuilder;

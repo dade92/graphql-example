@@ -1,4 +1,4 @@
-package webapp;
+package webapp.controller;
 
 import data.Book;
 import org.springframework.graphql.data.method.annotation.Argument;
