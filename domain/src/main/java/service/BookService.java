@@ -2,6 +2,7 @@ package service;
 
 import data.Author;
 import data.Book;
+import provider.BookIdProvider;
 import repository.AuthorRepository;
 import repository.BookRepository;
 
@@ -13,10 +14,16 @@ public class BookService {
 
     private final BookRepository bookRepository;
     private final AuthorRepository authorRepository;
+    private final BookIdProvider bookIdProvider;
 
-    public BookService(BookRepository bookRepository, AuthorRepository authorRepository) {
+    public BookService(
+        BookRepository bookRepository,
+        AuthorRepository authorRepository,
+        BookIdProvider bookIdProvider
+    ) {
         this.bookRepository = bookRepository;
         this.authorRepository = authorRepository;
+        this.bookIdProvider = bookIdProvider;
     }
 
     public Book createBook(String title, String description, String authorName) {
@@ -25,7 +32,7 @@ public class BookService {
         if (author.isEmpty()) {
             throw new AuthorNotFoundException("Author not found: " + authorName);
         }
-        Book book = new Book(UUID.randomUUID(), title, description, author.get().id());
+        Book book = new Book(bookIdProvider.getBookId(), title, description, author.get().id());
         return bookRepository.save(book);
     }
 
