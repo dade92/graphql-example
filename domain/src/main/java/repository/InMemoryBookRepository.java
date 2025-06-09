@@ -4,7 +4,6 @@ import data.Author;
 import data.Book;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class InMemoryBookRepository implements BookRepository {
     private final Map<UUID, Book> books = new HashMap<>();
@@ -29,9 +28,7 @@ public class InMemoryBookRepository implements BookRepository {
 
     @Override
     public List<Book> findByAuthor(Author author) {
-        return books.values().stream()
-            .filter(book -> book.getAuthor().equals(author))
-            .collect(Collectors.toList());
+        return Collections.emptyList();
     }
 
 }

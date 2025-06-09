@@ -6,13 +6,11 @@ public class Book {
     private UUID id;
     private String title;
     private String description;
-    private Author author;
 
-    public Book(UUID id, String title, String description, Author author) {
+    public Book(UUID id, String title, String description) {
         this.id = id;
         this.title = title;
         this.description = description;
-        this.author = author;
     }
 
     public UUID getId() {
@@ -39,11 +37,4 @@ public class Book {
         this.description = description;
     }
 
-    public Author getAuthor() {
-        return author;
-    }
-
-    public void setAuthor(Author author) {
-        this.author = author;
-    }
 }

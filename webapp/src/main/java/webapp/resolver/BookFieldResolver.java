@@ -15,12 +15,12 @@ public class BookFieldResolver {
         this.authorRepository = authorRepository;
     }
 
-    @SchemaMapping(typeName = "Book", field = "author")
-    public Author resolveAuthor(Book book) {
-        UUID authorId = book.getAuthor().getId();
-
-        return authorRepository.findById(authorId)
-            .orElseThrow(() -> new RuntimeException("Author not found: " + authorId));
-    }
+//    @SchemaMapping(typeName = "Book", field = "author")
+//    public Author resolveAuthor(Book book) {
+//        UUID authorId = book.getAuthor().getId();
+//
+//        return authorRepository.findById(authorId)
+//            .orElseThrow(() -> new RuntimeException("Author not found: " + authorId));
+//    }
 }
 
