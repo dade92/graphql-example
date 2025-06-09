@@ -12,7 +12,7 @@ public class InMemoryAuthorRepository implements AuthorRepository {
 
     @Override
     public Author save(Author author) {
-        authors.put(author.getId(), author);
+        authors.put(author.id(), author);
         return author;
     }
 
@@ -24,7 +24,7 @@ public class InMemoryAuthorRepository implements AuthorRepository {
     @Override
     public Optional<Author> findByName(String name) {
         return authors.values().stream()
-            .filter(author -> author.getName().equalsIgnoreCase(name))
+            .filter(author -> author.name().equalsIgnoreCase(name))
             .findFirst();
     }
 }
