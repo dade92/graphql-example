@@ -18,9 +18,9 @@ public class BookFieldResolver {
 
     @SchemaMapping(typeName = "Book", field = "author")
     public Author author(Book book) {
-        System.out.println("Resolving author for book: " + book.getId());
-        return authorRepository.findById(book.getAuthorId())
-            .orElseThrow(() -> new RuntimeException("Author not found: " + book.getAuthorId()));
+        System.out.println("Resolving author for book: " + book.id());
+        return authorRepository.findById(book.authorId())
+            .orElseThrow(() -> new RuntimeException("Author not found: " + book.authorId()));
     }
 }
 

@@ -55,11 +55,7 @@ public class BookGraphQLController {
 
     @QueryMapping
     public List<Book> getBooksByAuthor(@Argument UUID authorId) {
-        Optional<Author> author = authorRepository.findById(authorId);
-        if (author.isEmpty()) {
-            throw new IllegalArgumentException("Author not found: " + authorId);
-        }
-        return bookRepository.findByAuthor(author.get());
+        return bookRepository.findByAuthor(authorId);
     }
 }
 

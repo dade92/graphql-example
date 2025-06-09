@@ -1,16 +1,16 @@
 package repository;
 
-import data.Author;
 import data.Book;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class InMemoryBookRepository implements BookRepository {
     private final Map<UUID, Book> books = new HashMap<>();
 
     @Override
     public Book save(Book book) {
-        books.put(book.getId(), book);
+        books.put(book.id(), book);
         return book;
     }
 
@@ -22,13 +22,16 @@ public class InMemoryBookRepository implements BookRepository {
     @Override
     public Optional<Book> findByTitle(String title) {
         return books.values().stream()
-            .filter(book -> book.getTitle().equalsIgnoreCase(title))
+            .filter(book -> book.title().equalsIgnoreCase(title))
             .findFirst();
     }
 
     @Override
-    public List<Book> findByAuthor(Author author) {
-        return Collections.emptyList();
+    public List<Book> findByAuthor(UUID authorId) {
+        return books
+            .values().stream()
+            .filter(book -> book.authorId().equals(authorId))
+            .collect(Collectors.toList());
     }
 
 }
