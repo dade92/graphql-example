@@ -7,6 +7,7 @@ import org.springframework.boot.test.autoconfigure.graphql.GraphQlTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.graphql.test.tester.GraphQlTester;
 import service.AuthorService;
+import utils.FixtureLoader;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -52,14 +53,7 @@ public class AuthorGraphQLControllerTest {
         graphQlTester.document(mutation)
             .execute()
             .path("createAuthor").matchesJson(
-                """
-                    {
-                          "id": "123e4567-e89b-12d3-a456-426614174000",
-                          "name": "John",
-                          "surname": "Doe",
-                          "dateOfBirth": "1970-01-01"
-                    }
-                    """
+                FixtureLoader.readFile("/responses/author.json")
             );
     }
 
@@ -81,14 +75,7 @@ public class AuthorGraphQLControllerTest {
         graphQlTester.document(query)
             .execute()
             .path("getAuthorById").matchesJson(
-                """
-                    {
-                          "id": "123e4567-e89b-12d3-a456-426614174000",
-                          "name": "John",
-                          "surname": "Doe",
-                          "dateOfBirth": "1970-01-01"
-                    }
-                    """
+                FixtureLoader.readFile("/responses/author.json")
             );
     }
 
@@ -110,14 +97,7 @@ public class AuthorGraphQLControllerTest {
         graphQlTester.document(query)
             .execute()
             .path("getAuthorByName").matchesJson(
-                """
-                    {
-                          "id": "123e4567-e89b-12d3-a456-426614174000",
-                          "name": "John",
-                          "surname": "Doe",
-                          "dateOfBirth": "1970-01-01"
-                    }
-                    """
+                FixtureLoader.readFile("/responses/author.json")
             );
     }
 }

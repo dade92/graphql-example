@@ -9,6 +9,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.graphql.test.tester.GraphQlTester;
 import repository.AuthorRepository;
 import service.BookService;
+import utils.FixtureLoader;
 import webapp.resolver.BookFieldResolver;
 
 import java.time.LocalDate;
@@ -62,19 +63,7 @@ class BookGraphQLControllerTest {
         graphQlTester.document(query)
             .execute()
             .path("createBook").matchesJson(
-                """
-                    {
-                         "id": "123e4567-e89b-12d3-a456-426614174000",
-                         "title": "The Odyssey",
-                         "description": "Epic poem",
-                         "author": {
-                           "id": "123e4567-e89b-12d3-a456-426614174001",
-                           "name": "Homer",
-                           "surname": "",
-                           "dateOfBirth": "1970-01-01"
-                         }
-                    }
-                    """
+                FixtureLoader.readFile("/responses/book.json")
             );
     }
 
@@ -102,19 +91,7 @@ class BookGraphQLControllerTest {
         graphQlTester.document(query)
             .execute()
             .path("getBookById").matchesJson(
-                """
-                    {
-                         "id": "123e4567-e89b-12d3-a456-426614174000",
-                         "title": "The Odyssey",
-                         "description": "Epic poem",
-                         "author": {
-                           "id": "123e4567-e89b-12d3-a456-426614174001",
-                           "name": "Homer",
-                           "surname": "",
-                           "dateOfBirth": "1970-01-01"
-                         }
-                    }
-                    """
+                FixtureLoader.readFile("/responses/book.json")
             );
     }
 
@@ -142,19 +119,7 @@ class BookGraphQLControllerTest {
         graphQlTester.document(query)
             .execute()
             .path("getBookByTitle").matchesJson(
-                """
-                    {
-                         "id": "123e4567-e89b-12d3-a456-426614174000",
-                         "title": "The Odyssey",
-                         "description": "Epic poem",
-                         "author": {
-                           "id": "123e4567-e89b-12d3-a456-426614174001",
-                           "name": "Homer",
-                           "surname": "",
-                           "dateOfBirth": "1970-01-01"
-                         }
-                    }
-                    """
+                FixtureLoader.readFile("/responses/book.json")
             );
     }
 
@@ -182,32 +147,7 @@ class BookGraphQLControllerTest {
         graphQlTester.document(query)
             .execute()
             .path("getBooksByAuthor").matchesJson(
-                """
-                    [
-                        {
-                             "id": "123e4567-e89b-12d3-a456-426614174000",
-                             "title": "The Odyssey",
-                             "description": "Epic poem",
-                             "author": {
-                               "id": "123e4567-e89b-12d3-a456-426614174001",
-                               "name": "Homer",
-                               "surname": "",
-                               "dateOfBirth": "1970-01-01"
-                              }
-                         },
-                         {
-                             "id": "123e4567-e89b-12d3-a456-426614174000",
-                             "title": "The Odyssey",
-                             "description": "Epic poem",
-                             "author": {
-                               "id": "123e4567-e89b-12d3-a456-426614174001",
-                               "name": "Homer",
-                               "surname": "",
-                               "dateOfBirth": "1970-01-01"
-                             }
-                         }
-                    ]
-                    """
+                FixtureLoader.readFile("/responses/booksByAuthor.json")
             );
     }
 }
