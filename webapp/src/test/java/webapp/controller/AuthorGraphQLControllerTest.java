@@ -12,12 +12,14 @@ import service.AuthorService;
 import java.time.LocalDate;
 import java.util.UUID;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-
 @GraphQlTest(AuthorGraphQLController.class)
 public class AuthorGraphQLControllerTest {
 
-    public static final UUID ID = UUID.fromString("123e4567-e89b-12d3-a456-426614174000");
+    private static final UUID ID = UUID.fromString("123e4567-e89b-12d3-a456-426614174000");
+    private static final String NAME = "John";
+    private static final String SURNAME = "Doe";
+    private static final Author AUTHOR = new Author(ID, NAME, SURNAME, LocalDate.parse("1970-01-01"));
+
     @Autowired
     private GraphQlTester graphQlTester;
 
@@ -26,10 +28,8 @@ public class AuthorGraphQLControllerTest {
 
     @Test
     void createAuthor() {
-        Author author = new Author(ID, "John", "Doe", LocalDate.parse("1970-01-01"));
-
-        Mockito.when(authorService.createAuthor("John", "Doe", "1970-01-01"))
-            .thenReturn(author);
+        Mockito.when(authorService.createAuthor(NAME, SURNAME, "1970-01-01"))
+            .thenReturn(AUTHOR);
 
         String mutation = """
                 mutation {
@@ -44,17 +44,15 @@ public class AuthorGraphQLControllerTest {
 
         graphQlTester.document(mutation)
             .execute()
-            .path("createAuthor.name").entity(String.class).isEqualTo("John")
+            .path("createAuthor.name").entity(String.class).isEqualTo(NAME)
+            .path("createAuthor.surname").entity(String.class).isEqualTo(SURNAME)
             .path("createAuthor.id").entity(String.class).isEqualTo("123e4567-e89b-12d3-a456-426614174000")
-            .path("createAuthor.surname").entity(String.class).isEqualTo("Doe")
             .path("createAuthor.dateOfBirth").entity(String.class).isEqualTo("1970-01-01");
     }
 
     @Test
     void getAuthorById() {
-        Author author = new Author(ID, "Jane", "Smith", LocalDate.parse("1985-05-20"));
-
-        Mockito.when(authorService.getAuthorById(ID)).thenReturn(author);
+        Mockito.when(authorService.getAuthorById(ID)).thenReturn(AUTHOR);
 
         String query = String.format("""
                 query {
@@ -70,30 +68,29 @@ public class AuthorGraphQLControllerTest {
         graphQlTester.document(query)
             .execute()
             .path("getAuthorById.id").entity(String.class).isEqualTo("123e4567-e89b-12d3-a456-426614174000")
-            .path("getAuthorById.name").entity(String.class).isEqualTo("Jane")
-            .path("getAuthorById.surname").entity(String.class).isEqualTo("Smith");
+            .path("getAuthorById.name").entity(String.class).isEqualTo(NAME)
+            .path("getAuthorById.surname").entity(String.class).isEqualTo(SURNAME);
     }
 
     @Test
     void getAuthorByName() {
-        Author author = new Author(ID, "Emily", "Bronte", LocalDate.parse("1818-07-30"));
+        Mockito.when(authorService.getAuthorByName(NAME)).thenReturn(AUTHOR);
 
-        Mockito.when(authorService.getAuthorByName("Emily")).thenReturn(author);
-
-        String query = """
+        String query = String.format("""
                 query {
-                  getAuthorByName(name: "Emily") {
+                  getAuthorByName(name: "%s") {
                     id
                     name
                     surname
                     dateOfBirth
                   }
                 }
-            """;
+            """, NAME);
 
         graphQlTester.document(query)
             .execute()
             .path("getAuthorByName.id").entity(String.class).isEqualTo("123e4567-e89b-12d3-a456-426614174000")
-            .path("getAuthorByName.surname").entity(String.class).isEqualTo("Bronte");
+            .path("getAuthorByName.name").entity(String.class).isEqualTo(NAME)
+            .path("getAuthorByName.surname").entity(String.class).isEqualTo(SURNAME);
     }
 }
