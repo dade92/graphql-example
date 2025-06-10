@@ -26,7 +26,7 @@ public class AuthorGraphQLController {
         @Argument String surname,
         @Argument String dateOfBirth
     ) {
-        return authorService.createAuthor(name, surname, dateOfBirth);
+        return authorService.createAuthor(name, dateOfBirth);
     }
 
     @QueryMapping

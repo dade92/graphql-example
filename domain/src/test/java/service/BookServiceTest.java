@@ -15,7 +15,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -44,7 +46,7 @@ public class BookServiceTest {
 
     @Test
     public void createBook() {
-        Author author = new Author(AUTHOR_ID, AUTHOR_NAME, "Doe", null);
+        Author author = new Author(AUTHOR_ID, AUTHOR_NAME, null);
         Book expectedBook = new Book(BOOK_ID, TITLE, DESCRIPTION, AUTHOR_ID);
 
         when(authorRepository.findByName(AUTHOR_NAME)).thenReturn(Optional.of(author));

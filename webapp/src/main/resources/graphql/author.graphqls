@@ -1,7 +1,6 @@
 type Author {
     id: ID!
     name: String!
-    surname: String!
     dateOfBirth: String!
 }
 
@@ -11,5 +10,5 @@ type Query {
 }
 
 type Mutation {
-    createAuthor(name: String!, surname: String!, dateOfBirth: String!): Author
+    createAuthor(name: String!, dateOfBirth: String!): Author
 }

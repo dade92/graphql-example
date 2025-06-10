@@ -22,7 +22,7 @@ public class AuthorService {
         this.authorIdProvider = authorIdProvider;
     }
 
-    public Author createAuthor(String name, String surname, String dateOfBirth) {
+    public Author createAuthor(String name, String dateOfBirth) {
         Optional<Author> existingAuthor = authorRepository.findByName(name);
         if (existingAuthor.isPresent()) {
             throw new ExistingAuthorException("Author named " + name + " already exists");
@@ -30,7 +30,7 @@ public class AuthorService {
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         LocalDate date = LocalDate.parse(dateOfBirth, formatter);
-        Author author = new Author(authorIdProvider.getBookId(), name, surname, date);
+        Author author = new Author(authorIdProvider.getBookId(), name, date);
 
         return authorRepository.save(author);
     }

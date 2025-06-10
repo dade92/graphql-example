@@ -20,12 +20,10 @@ public class AuthorGraphQLControllerTest {
 
     private static final UUID ID = UUID.fromString("123e4567-e89b-12d3-a456-426614174000");
     private static final String NAME = "John";
-    private static final String SURNAME = "Doe";
     public static final String DATE = "01/01/1970";
     private static final Author AUTHOR = new Author(
         ID,
         NAME,
-        SURNAME,
         LocalDate.parse(DATE, DateTimeFormatter.ofPattern("dd/MM/yyyy"))
     );
 
@@ -37,14 +35,13 @@ public class AuthorGraphQLControllerTest {
 
     @Test
     void createAuthor() {
-        when(authorService.createAuthor(NAME, SURNAME, DATE)).thenReturn(AUTHOR);
+        when(authorService.createAuthor(NAME, DATE)).thenReturn(AUTHOR);
 
         String mutation = """
                 mutation {
-                  createAuthor(name: "John", surname: "Doe", dateOfBirth: "01/01/1970") {
+                  createAuthor(name: "John", dateOfBirth: "01/01/1970") {
                     id
                     name
-                    surname
                     dateOfBirth
                   }
                 }
@@ -66,7 +63,6 @@ public class AuthorGraphQLControllerTest {
                   getAuthorById(id: "%s") {
                     id
                     name
-                    surname
                     dateOfBirth
                   }
                 }
@@ -88,7 +84,6 @@ public class AuthorGraphQLControllerTest {
                   getAuthorByName(name: "%s") {
                     id
                     name
-                    surname
                     dateOfBirth
                   }
                 }

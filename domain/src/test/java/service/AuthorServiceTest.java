@@ -13,13 +13,18 @@ import java.time.LocalDate;
 import java.util.Optional;
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class AuthorServiceTest {
     public static final String NAME = "John";
-    public static final String SURNAME = "Doe";
     public static final String DATE_OF_BIRTH_INPUT = "15/06/1980";
     public static final LocalDate DATE_OF_BIRTH = LocalDate.of(1980, 6, 15);
 
@@ -39,26 +44,26 @@ public class AuthorServiceTest {
     @Test
     public void createAuthor() {
         UUID generatedId = UUID.randomUUID();
-        Author author = new Author(generatedId, NAME, SURNAME, DATE_OF_BIRTH);
+        Author author = new Author(generatedId, NAME, DATE_OF_BIRTH);
 
         when(authorRepository.findByName(NAME)).thenReturn(Optional.empty());
         when(authorIdProvider.getBookId()).thenReturn(generatedId);
         when(authorRepository.save(author)).thenReturn(author);
 
-        Author result = authorService.createAuthor(NAME, SURNAME, DATE_OF_BIRTH_INPUT);
+        Author result = authorService.createAuthor(NAME, DATE_OF_BIRTH_INPUT);
 
         assertEquals(author, result);
     }
 
     @Test
     public void createAuthorButAlreadyExists() {
-        Author existingAuthor = new Author(UUID.randomUUID(), NAME, SURNAME, DATE_OF_BIRTH);
+        Author existingAuthor = new Author(UUID.randomUUID(), NAME, DATE_OF_BIRTH);
 
         when(authorRepository.findByName(NAME)).thenReturn(Optional.of(existingAuthor));
 
         ExistingAuthorException exception = assertThrows(
             ExistingAuthorException.class,
-            () -> authorService.createAuthor(NAME, SURNAME, DATE_OF_BIRTH_INPUT)
+            () -> authorService.createAuthor(NAME, DATE_OF_BIRTH_INPUT)
         );
 
         assertEquals("Author named John already exists", exception.getMessage());
@@ -70,7 +75,7 @@ public class AuthorServiceTest {
     @Test
     public void getById() {
         UUID id = UUID.randomUUID();
-        Author author = new Author(id, NAME, SURNAME, DATE_OF_BIRTH);
+        Author author = new Author(id, NAME, DATE_OF_BIRTH);
         when(authorRepository.findById(id)).thenReturn(Optional.of(author));
 
         Author result = authorService.getAuthorById(id);
@@ -90,7 +95,7 @@ public class AuthorServiceTest {
 
     @Test
     public void getByNameHappyPath() {
-        Author author = new Author(UUID.randomUUID(), NAME, SURNAME, DATE_OF_BIRTH);
+        Author author = new Author(UUID.randomUUID(), NAME, DATE_OF_BIRTH);
         when(authorRepository.findByName(NAME)).thenReturn(Optional.of(author));
 
         Author result = authorService.getAuthorByName(NAME);
