@@ -10,7 +10,7 @@ import org.springframework.graphql.test.tester.GraphQlTester;
 import repository.AuthorRepository;
 import service.BookService;
 import utils.FixtureLoader;
-import webapp.resolver.BookFieldResolver;
+import webapp.resolver.BookAuthorFieldResolver;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -19,7 +19,7 @@ import java.util.UUID;
 
 import static org.mockito.Mockito.when;
 
-@GraphQlTest({BookGraphQLController.class, BookFieldResolver.class})
+@GraphQlTest({BookGraphQLController.class, BookAuthorFieldResolver.class})
 class BookGraphQLControllerTest {
 
     public static final UUID BOOK_ID = UUID.fromString("123e4567-e89b-12d3-a456-426614174000");

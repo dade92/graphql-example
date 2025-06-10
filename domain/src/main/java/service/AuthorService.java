@@ -33,9 +33,7 @@ public class AuthorService {
             throw new ExistingAuthorException("Author named " + authorName + " already exists");
         }
 
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        LocalDate date = LocalDate.parse(dateOfBirth, formatter);
-        Author author = new Author(authorIdProvider.getBookId(), authorName, date);
+        Author author = new Author(authorIdProvider.getBookId(), authorName, parseDate(dateOfBirth));
 
         return authorRepository.save(author);
     }
@@ -48,4 +46,7 @@ public class AuthorService {
         return authorRepository.findByName(name).orElse(null);
     }
 
+    private LocalDate parseDate(String date) {
+        return LocalDate.parse(date, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+    }
 }
