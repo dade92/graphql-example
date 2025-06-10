@@ -22,9 +22,9 @@ public class AuthorGraphQLController {
 
     @MutationMapping
     public Author createAuthor(
-        @Argument("name") String name,
-        @Argument("surname") String surname,
-        @Argument("dateOfBirth") String dateOfBirth
+        @Argument String name,
+        @Argument String surname,
+        @Argument String dateOfBirth
     ) {
         return authorService.createAuthor(name, surname, dateOfBirth);
     }
