@@ -24,11 +24,10 @@ class BookGraphQLControllerTest {
     public static final UUID BOOK_ID = UUID.fromString("123e4567-e89b-12d3-a456-426614174000");
     public static final UUID AUTHOR_ID = UUID.fromString("123e4567-e89b-12d3-a456-426614174001");
     public static final String AUTHOR_NAME = "Homer";
-    public static final Author AUTHOR = new Author(AUTHOR_ID, AUTHOR_NAME, "", LocalDate.parse("1970-01-01"));
     public static final String TITLE = "The Odyssey";
     public static final String DESCRIPTION = "Epic poem";
+    public static final Author AUTHOR = new Author(AUTHOR_ID, AUTHOR_NAME, "", LocalDate.parse("1970-01-01"));
     public static final Book BOOK = new Book(BOOK_ID, TITLE, DESCRIPTION, AUTHOR_ID);
-
 
     @Autowired
     private GraphQlTester graphQlTester;
@@ -38,6 +37,46 @@ class BookGraphQLControllerTest {
 
     @MockBean
     private AuthorRepository authorRepository;
+
+    @Test
+    void createBook() {
+        when(bookService.createBook(TITLE, DESCRIPTION, AUTHOR_NAME)).thenReturn(BOOK);
+        when(authorRepository.findById(AUTHOR_ID)).thenReturn(Optional.of(AUTHOR));
+
+        String query = String.format("""
+                mutation {
+                  createBook(title: "%s", description: "%s", authorName: "%s") {
+                    id
+                    title
+                    description
+                    author {
+                      id
+                      name
+                      surname
+                      dateOfBirth
+                    }
+                  }
+                }
+            """, TITLE, DESCRIPTION, AUTHOR_NAME);
+
+        graphQlTester.document(query)
+            .execute()
+            .path("createBook").matchesJson(
+                """
+                    {
+                         "id": "123e4567-e89b-12d3-a456-426614174000",
+                         "title": "The Odyssey",
+                         "description": "Epic poem",
+                         "author": {
+                           "id": "123e4567-e89b-12d3-a456-426614174001",
+                           "name": "Homer",
+                           "surname": "",
+                           "dateOfBirth": "1970-01-01"
+                         }
+                    }
+                    """
+            );
+    }
 
     @Test
     void getBookByID() {
