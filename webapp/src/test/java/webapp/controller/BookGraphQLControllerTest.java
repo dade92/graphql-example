@@ -12,6 +12,7 @@ import service.BookService;
 import webapp.resolver.BookFieldResolver;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -90,9 +91,77 @@ class BookGraphQLControllerTest {
 
         graphQlTester.document(query)
             .execute()
+            .path("getBookByTitle").matchesJson(
+                """
+                    {
+                         "id": "123e4567-e89b-12d3-a456-426614174000",
+                         "title": "The Odyssey",
+                         "description": "Epic poem",
+                         "author": {
+                           "id": "123e4567-e89b-12d3-a456-426614174001",
+                           "name": "Homer",
+                           "surname": "",
+                           "dateOfBirth": "1970-01-01"
+                         }
+                    }
+                    """
+            )
             .path("getBookByTitle.title").entity(String.class).isEqualTo(TITLE)
             .path("getBookByTitle.description").entity(String.class).isEqualTo(DESCRIPTION)
             .path("getBookByTitle.author.name").entity(String.class).isEqualTo(AUTHOR_NAME)
             .path("getBookByTitle.author.dateOfBirth").entity(String.class).isEqualTo("1970-01-01");
+    }
+
+    @Test
+    void getBooksByAuthor() {
+        when(bookService.findByAuthor(AUTHOR_ID)).thenReturn(List.of(BOOK, BOOK));
+        when(authorRepository.findById(AUTHOR_ID)).thenReturn(Optional.of(AUTHOR));
+
+        String query = String.format("""
+                query {
+                  getBooksByAuthor(authorId: "%s") {
+                    id
+                    title
+                    description
+                    author {
+                      id
+                      name
+                      surname
+                      dateOfBirth
+                    }
+                  }
+                }
+            """, AUTHOR_ID);
+
+        graphQlTester.document(query)
+            .execute()
+            .path("getBooksByAuthor").matchesJson(
+                """
+                    [
+                        {
+                             "id": "123e4567-e89b-12d3-a456-426614174000",
+                             "title": "The Odyssey",
+                             "description": "Epic poem",
+                             "author": {
+                               "id": "123e4567-e89b-12d3-a456-426614174001",
+                               "name": "Homer",
+                               "surname": "",
+                               "dateOfBirth": "1970-01-01"
+                              }
+                         },
+                         {
+                             "id": "123e4567-e89b-12d3-a456-426614174000",
+                             "title": "The Odyssey",
+                             "description": "Epic poem",
+                             "author": {
+                               "id": "123e4567-e89b-12d3-a456-426614174001",
+                               "name": "Homer",
+                               "surname": "",
+                               "dateOfBirth": "1970-01-01"
+                             }
+                         }
+                    ]
+                    """
+            );
     }
 }
