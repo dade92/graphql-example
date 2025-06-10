@@ -30,12 +30,12 @@ public class AuthorGraphQLController {
     }
 
     @QueryMapping
-    public Author getAuthorById(@Argument("id") UUID id) {
+    public Author getAuthorById(@Argument UUID id) {
         return authorService.getAuthorById(id);
     }
 
     @QueryMapping
-    public Author getAuthorByName(@Argument("id") String name) {
+    public Author getAuthorByName(@Argument String name) {
         return authorService.getAuthorByName(name);
     }
 }
