@@ -9,6 +9,8 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.graphql.test.tester.GraphQlTester;
 import service.AuthorService;
 import utils.FixtureLoader;
+import webapp.adapter.AuthorResponse;
+import webapp.adapter.AuthorResponseAdapter;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -27,7 +29,7 @@ public class AuthorGraphQLControllerTest {
         NAME,
         LocalDate.parse(DATE, DateTimeFormatter.ofPattern("dd/MM/yyyy"))
     );
-    private static final AuthorDto AUTHOR_DTO = new AuthorDto(
+    private static final AuthorResponse AUTHOR_DTO = new AuthorResponse(
         ID,
         NAME,
         DATE
@@ -40,11 +42,11 @@ public class AuthorGraphQLControllerTest {
     private AuthorService authorService;
 
     @MockBean
-    private AuthorDtoAdapter authorDtoAdapter;
+    private AuthorResponseAdapter authorResponseAdapter;
 
     @BeforeEach
     void setUp() {
-        when(authorDtoAdapter.adapt(AUTHOR)).thenReturn(AUTHOR_DTO);
+        when(authorResponseAdapter.adapt(AUTHOR)).thenReturn(AUTHOR_DTO);
     }
 
     @Test

@@ -5,6 +5,8 @@ import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.stereotype.Controller;
 import service.AuthorService;
+import webapp.adapter.AuthorResponse;
+import webapp.adapter.AuthorResponseAdapter;
 
 import java.util.UUID;
 
@@ -12,31 +14,31 @@ import java.util.UUID;
 public class AuthorGraphQLController {
 
     private final AuthorService authorService;
-    private final AuthorDtoAdapter authorDtoAdapter;
+    private final AuthorResponseAdapter authorResponseAdapter;
 
     public AuthorGraphQLController(
         AuthorService authorService,
-        AuthorDtoAdapter authorDtoAdapter
+        AuthorResponseAdapter authorResponseAdapter
     ) {
         this.authorService = authorService;
-        this.authorDtoAdapter = authorDtoAdapter;
+        this.authorResponseAdapter = authorResponseAdapter;
     }
 
     @MutationMapping
-    public AuthorDto createAuthor(
+    public AuthorResponse createAuthor(
         @Argument String name,
         @Argument String dateOfBirth
     ) {
-        return authorDtoAdapter.adapt(authorService.createAuthor(name, dateOfBirth));
+        return authorResponseAdapter.adapt(authorService.createAuthor(name, dateOfBirth));
     }
 
     @QueryMapping
-    public AuthorDto getAuthorById(@Argument UUID id) {
-        return authorDtoAdapter.adapt(authorService.getAuthorById(id));
+    public AuthorResponse getAuthorById(@Argument UUID id) {
+        return authorResponseAdapter.adapt(authorService.getAuthorById(id));
     }
 
     @QueryMapping
-    public AuthorDto getAuthorByName(@Argument String name) {
-        return authorDtoAdapter.adapt(authorService.getAuthorByName(name));
+    public AuthorResponse getAuthorByName(@Argument String name) {
+        return authorResponseAdapter.adapt(authorService.getAuthorByName(name));
     }
 }

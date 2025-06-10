@@ -1,13 +1,13 @@
-package webapp.controller;
+package webapp.adapter;
 
 import data.Author;
 
 import java.time.format.DateTimeFormatter;
 
-public class AuthorDtoAdapter {
+public class AuthorResponseAdapter {
 
-    public AuthorDto adapt(Author author) {
-        return new AuthorDto(
+    public AuthorResponse adapt(Author author) {
+        return new AuthorResponse(
             author.id(),
             author.name(),
             author.dateOfBirth().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
