@@ -3,7 +3,6 @@ package webapp.controller;
 import data.Author;
 import data.Book;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.graphql.GraphQlTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -16,8 +15,19 @@ import java.time.LocalDate;
 import java.util.Optional;
 import java.util.UUID;
 
+import static org.mockito.Mockito.when;
+
 @GraphQlTest({BookGraphQLController.class, BookFieldResolver.class})
 class BookGraphQLControllerTest {
+
+    public static final UUID BOOK_ID = UUID.fromString("123e4567-e89b-12d3-a456-426614174000");
+    public static final UUID AUTHOR_ID = UUID.fromString("123e4567-e89b-12d3-a456-426614174001");
+    public static final String AUTHOR_NAME = "Homer";
+    public static final Author AUTHOR = new Author(AUTHOR_ID, AUTHOR_NAME, "", LocalDate.parse("1970-01-01"));
+    public static final String TITLE = "The Odyssey";
+    public static final String DESCRIPTION = "Epic poem";
+    public static final Book BOOK = new Book(BOOK_ID, TITLE, DESCRIPTION, AUTHOR_ID);
+
 
     @Autowired
     private GraphQlTester graphQlTester;
@@ -29,37 +39,60 @@ class BookGraphQLControllerTest {
     private AuthorRepository authorRepository;
 
     @Test
-    void testGetBookById_withResolvedAuthor() {
-        UUID bookId = UUID.randomUUID();
-        UUID authorId = UUID.randomUUID();
-
-        Book book = new Book(bookId, "The Odyssey", "Epic poem", authorId);
-        Author author = new Author(authorId, "Homer", "", LocalDate.parse("1970-01-01"));
-
-        Mockito.when(bookService.findBookById(bookId)).thenReturn(book);
-        Mockito.when(authorRepository.findById(authorId)).thenReturn(Optional.of(author));
+    void getBookByID() {
+        when(bookService.findBookById(BOOK_ID)).thenReturn(BOOK);
+        when(authorRepository.findById(AUTHOR_ID)).thenReturn(Optional.of(AUTHOR));
 
         String query = String.format("""
-            query {
-              getBookById(id: "%s") {
-                id
-                title
-                description
-                author {
-                  id
-                  name
-                  surname
-                  dateOfBirth
+                query {
+                  getBookById(id: "%s") {
+                    id
+                    title
+                    description
+                    author {
+                      id
+                      name
+                      surname
+                      dateOfBirth
+                    }
+                  }
                 }
-              }
-            }
-        """, bookId);
+            """, BOOK_ID);
 
         graphQlTester.document(query)
             .execute()
-            .path("getBookById.title").entity(String.class).isEqualTo("The Odyssey")
-            .path("getBookById.description").entity(String.class).isEqualTo("Epic poem")
-            .path("getBookById.author.name").entity(String.class).isEqualTo("Homer")
+            .path("getBookById.title").entity(String.class).isEqualTo(TITLE)
+            .path("getBookById.description").entity(String.class).isEqualTo(DESCRIPTION)
+            .path("getBookById.author.name").entity(String.class).isEqualTo(AUTHOR_NAME)
             .path("getBookById.author.dateOfBirth").entity(String.class).isEqualTo("1970-01-01");
+    }
+
+    @Test
+    void getBookByName() {
+        when(bookService.findBookByTitle(TITLE)).thenReturn(BOOK);
+        when(authorRepository.findById(AUTHOR_ID)).thenReturn(Optional.of(AUTHOR));
+
+        String query = String.format("""
+                query {
+                  getBookByTitle(title: "%s") {
+                    id
+                    title
+                    description
+                    author {
+                      id
+                      name
+                      surname
+                      dateOfBirth
+                    }
+                  }
+                }
+            """, TITLE);
+
+        graphQlTester.document(query)
+            .execute()
+            .path("getBookByTitle.title").entity(String.class).isEqualTo(TITLE)
+            .path("getBookByTitle.description").entity(String.class).isEqualTo(DESCRIPTION)
+            .path("getBookByTitle.author.name").entity(String.class).isEqualTo(AUTHOR_NAME)
+            .path("getBookByTitle.author.dateOfBirth").entity(String.class).isEqualTo("1970-01-01");
     }
 }
