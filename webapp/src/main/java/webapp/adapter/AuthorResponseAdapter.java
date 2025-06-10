@@ -1,6 +1,6 @@
 package webapp.adapter;
 
-import data.Author;
+import model.Author;
 
 import java.time.format.DateTimeFormatter;
 

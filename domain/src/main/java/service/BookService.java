@@ -1,7 +1,7 @@
 package service;
 
-import data.Author;
-import data.Book;
+import model.Author;
+import model.Book;
 import provider.BookIdProvider;
 import repository.AuthorRepository;
 import repository.BookRepository;

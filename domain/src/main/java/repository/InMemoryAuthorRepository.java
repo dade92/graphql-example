@@ -1,6 +1,6 @@
 package repository;
 
-import data.Author;
+import model.Author;
 
 import java.util.HashMap;
 import java.util.Map;

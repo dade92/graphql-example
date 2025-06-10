@@ -1,7 +1,7 @@
 package webapp.resolver;
 
-import data.Author;
-import data.Book;
+import model.Author;
+import model.Book;
 import org.springframework.graphql.data.method.annotation.SchemaMapping;
 import org.springframework.stereotype.Controller;
 import repository.AuthorRepository;

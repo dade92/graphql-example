@@ -1,7 +1,7 @@
 package webapp.controller;
 
-import data.Author;
-import data.Book;
+import model.Author;
+import model.Book;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.graphql.GraphQlTest;

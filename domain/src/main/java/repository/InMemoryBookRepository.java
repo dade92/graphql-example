@@ -1,6 +1,6 @@
 package repository;
 
-import data.Book;
+import model.Book;
 
 import java.util.*;
 import java.util.stream.Collectors;

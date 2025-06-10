@@ -1,7 +1,7 @@
 package service;
 
-import data.Author;
-import data.Book;
+import model.Author;
+import model.Book;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

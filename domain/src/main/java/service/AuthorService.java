@@ -1,6 +1,6 @@
 package service;
 
-import data.Author;
+import model.Author;
 import provider.AuthorIdProvider;
 import repository.AuthorRepository;
 import utils.AuthorNameNormalizer;

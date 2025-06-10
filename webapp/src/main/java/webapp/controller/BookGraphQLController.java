@@ -1,6 +1,6 @@
 package webapp.controller;
 
-import data.Book;
+import model.Book;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
