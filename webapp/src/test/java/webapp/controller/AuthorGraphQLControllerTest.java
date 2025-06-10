@@ -45,10 +45,16 @@ public class AuthorGraphQLControllerTest {
 
         graphQlTester.document(mutation)
             .execute()
-            .path("createAuthor.name").entity(String.class).isEqualTo(NAME)
-            .path("createAuthor.surname").entity(String.class).isEqualTo(SURNAME)
-            .path("createAuthor.id").entity(String.class).isEqualTo("123e4567-e89b-12d3-a456-426614174000")
-            .path("createAuthor.dateOfBirth").entity(String.class).isEqualTo("1970-01-01");
+            .path("createAuthor").matchesJson(
+                """
+                    {
+                          "id": "123e4567-e89b-12d3-a456-426614174000",
+                          "name": "John",
+                          "surname": "Doe",
+                          "dateOfBirth": "1970-01-01"
+                    }
+                    """
+            );
     }
 
     @Test
@@ -68,9 +74,16 @@ public class AuthorGraphQLControllerTest {
 
         graphQlTester.document(query)
             .execute()
-            .path("getAuthorById.id").entity(String.class).isEqualTo("123e4567-e89b-12d3-a456-426614174000")
-            .path("getAuthorById.name").entity(String.class).isEqualTo(NAME)
-            .path("getAuthorById.surname").entity(String.class).isEqualTo(SURNAME);
+            .path("getAuthorById").matchesJson(
+                """
+                    {
+                          "id": "123e4567-e89b-12d3-a456-426614174000",
+                          "name": "John",
+                          "surname": "Doe",
+                          "dateOfBirth": "1970-01-01"
+                    }
+                    """
+            );
     }
 
     @Test
@@ -90,8 +103,15 @@ public class AuthorGraphQLControllerTest {
 
         graphQlTester.document(query)
             .execute()
-            .path("getAuthorByName.id").entity(String.class).isEqualTo("123e4567-e89b-12d3-a456-426614174000")
-            .path("getAuthorByName.name").entity(String.class).isEqualTo(NAME)
-            .path("getAuthorByName.surname").entity(String.class).isEqualTo(SURNAME);
+            .path("getAuthorByName").matchesJson(
+                """
+                    {
+                          "id": "123e4567-e89b-12d3-a456-426614174000",
+                          "name": "John",
+                          "surname": "Doe",
+                          "dateOfBirth": "1970-01-01"
+                    }
+                    """
+            );
     }
 }
