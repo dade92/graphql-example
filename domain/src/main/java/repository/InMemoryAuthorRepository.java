@@ -1,6 +1,6 @@
 package repository;
 
-import data.Author;
+import model.Author;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -12,7 +12,7 @@ public class InMemoryAuthorRepository implements AuthorRepository {
 
     @Override
     public Author save(Author author) {
-        authors.put(author.getId(), author);
+        authors.put(author.id(), author);
         return author;
     }
 
@@ -23,8 +23,9 @@ public class InMemoryAuthorRepository implements AuthorRepository {
 
     @Override
     public Optional<Author> findByName(String name) {
-        return authors.values().stream()
-            .filter(author -> author.getName().equalsIgnoreCase(name))
+        return authors
+            .values().stream()
+            .filter(author -> author.name().equalsIgnoreCase(name))
             .findFirst();
     }
 }

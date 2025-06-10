@@ -17,8 +17,6 @@
 
     <properties>
         <java.version>17</java.version>
-        <graphql-java-tools.version>12.0.1</graphql-java-tools.version>
-        <graphql-spring-boot-starter.version>12.0.0</graphql-spring-boot-starter.version>
     </properties>
 
     <dependencies>
@@ -47,6 +45,20 @@
             <groupId>org.springframework.graphql</groupId>
             <artifactId>spring-graphql</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-graphql</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.graphql</groupId>
+            <artifactId>spring-graphql-test</artifactId>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>
@@ -58,10 +70,6 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <configuration>
-                    <source>17</source>
-                    <target>17</target>
-                </configuration>
             </plugin>
         </plugins>
     </build>

@@ -1,7 +1,6 @@
 package repository;
 
-import data.Author;
-import data.Book;
+import model.Book;
 
 import java.util.List;
 import java.util.Optional;
@@ -14,5 +13,5 @@ public interface BookRepository {
 
     Optional<Book> findByTitle(String title);
 
-    List<Book> findByAuthor(Author author);
+    List<Book> findByAuthor(UUID author);
 }
