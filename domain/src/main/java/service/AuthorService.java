@@ -3,6 +3,7 @@ package service;
 import data.Author;
 import provider.AuthorIdProvider;
 import repository.AuthorRepository;
+import utils.AuthorNameNormalizer;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -13,24 +14,28 @@ public class AuthorService {
 
     private final AuthorRepository authorRepository;
     private final AuthorIdProvider authorIdProvider;
+    private final AuthorNameNormalizer authorNameNormalizer;
 
     public AuthorService(
         AuthorRepository authorRepository,
-        AuthorIdProvider authorIdProvider
+        AuthorIdProvider authorIdProvider,
+        AuthorNameNormalizer authorNameNormalizer
     ) {
         this.authorRepository = authorRepository;
         this.authorIdProvider = authorIdProvider;
+        this.authorNameNormalizer = authorNameNormalizer;
     }
 
     public Author createAuthor(String name, String dateOfBirth) {
-        Optional<Author> existingAuthor = authorRepository.findByName(name);
+        String authorName = authorNameNormalizer.get(name);
+        Optional<Author> existingAuthor = authorRepository.findByName(authorName);
         if (existingAuthor.isPresent()) {
-            throw new ExistingAuthorException("Author named " + name + " already exists");
+            throw new ExistingAuthorException("Author named " + authorName + " already exists");
         }
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         LocalDate date = LocalDate.parse(dateOfBirth, formatter);
-        Author author = new Author(authorIdProvider.getBookId(), name, date);
+        Author author = new Author(authorIdProvider.getBookId(), authorName, date);
 
         return authorRepository.save(author);
     }

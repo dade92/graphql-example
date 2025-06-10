@@ -8,6 +8,7 @@ import repository.AuthorRepository;
 import repository.BookRepository;
 import service.AuthorService;
 import service.BookService;
+import utils.AuthorNameNormalizer;
 import webapp.adapter.AuthorResponseAdapter;
 
 @Configuration
@@ -17,7 +18,8 @@ public class ServiceConfiguration {
     public AuthorService authorService(AuthorRepository authorRepository) {
         return new AuthorService(
             authorRepository,
-            new AuthorIdProvider()
+            new AuthorIdProvider(),
+            new AuthorNameNormalizer()
         );
     }
 

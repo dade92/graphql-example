@@ -8,6 +8,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import provider.AuthorIdProvider;
 import repository.AuthorRepository;
+import utils.AuthorNameNormalizer;
 
 import java.time.LocalDate;
 import java.util.Optional;
@@ -34,11 +35,14 @@ public class AuthorServiceTest {
     @Mock
     private AuthorIdProvider authorIdProvider;
 
+    @Mock
+    private AuthorNameNormalizer authorNameNormalizer;
+
     private AuthorService authorService;
 
     @BeforeEach
     public void setUp() {
-        authorService = new AuthorService(authorRepository, authorIdProvider);
+        authorService = new AuthorService(authorRepository, authorIdProvider, authorNameNormalizer);
     }
 
     @Test
@@ -49,6 +53,7 @@ public class AuthorServiceTest {
         when(authorRepository.findByName(NAME)).thenReturn(Optional.empty());
         when(authorIdProvider.getBookId()).thenReturn(generatedId);
         when(authorRepository.save(author)).thenReturn(author);
+        when(authorNameNormalizer.get(NAME)).thenReturn(NAME);
 
         Author result = authorService.createAuthor(NAME, DATE_OF_BIRTH_INPUT);
 
@@ -60,6 +65,7 @@ public class AuthorServiceTest {
         Author existingAuthor = new Author(UUID.randomUUID(), NAME, DATE_OF_BIRTH);
 
         when(authorRepository.findByName(NAME)).thenReturn(Optional.of(existingAuthor));
+        when(authorNameNormalizer.get(NAME)).thenReturn(NAME);
 
         ExistingAuthorException exception = assertThrows(
             ExistingAuthorException.class,
