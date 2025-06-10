@@ -39,4 +39,3 @@ public class AuthorGraphQLController {
         return authorService.getAuthorByName(name);
     }
 }
-
