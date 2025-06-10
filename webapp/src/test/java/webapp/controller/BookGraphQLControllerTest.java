@@ -62,10 +62,21 @@ class BookGraphQLControllerTest {
 
         graphQlTester.document(query)
             .execute()
-            .path("getBookById.title").entity(String.class).isEqualTo(TITLE)
-            .path("getBookById.description").entity(String.class).isEqualTo(DESCRIPTION)
-            .path("getBookById.author.name").entity(String.class).isEqualTo(AUTHOR_NAME)
-            .path("getBookById.author.dateOfBirth").entity(String.class).isEqualTo("1970-01-01");
+            .path("getBookById").matchesJson(
+                """
+                    {
+                         "id": "123e4567-e89b-12d3-a456-426614174000",
+                         "title": "The Odyssey",
+                         "description": "Epic poem",
+                         "author": {
+                           "id": "123e4567-e89b-12d3-a456-426614174001",
+                           "name": "Homer",
+                           "surname": "",
+                           "dateOfBirth": "1970-01-01"
+                         }
+                    }
+                    """
+            );
     }
 
     @Test
@@ -105,11 +116,7 @@ class BookGraphQLControllerTest {
                          }
                     }
                     """
-            )
-            .path("getBookByTitle.title").entity(String.class).isEqualTo(TITLE)
-            .path("getBookByTitle.description").entity(String.class).isEqualTo(DESCRIPTION)
-            .path("getBookByTitle.author.name").entity(String.class).isEqualTo(AUTHOR_NAME)
-            .path("getBookByTitle.author.dateOfBirth").entity(String.class).isEqualTo("1970-01-01");
+            );
     }
 
     @Test
