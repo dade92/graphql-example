@@ -1,6 +1,7 @@
 package webapp.controller;
 
 import data.Author;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.graphql.GraphQlTest;
@@ -26,12 +27,25 @@ public class AuthorGraphQLControllerTest {
         NAME,
         LocalDate.parse(DATE, DateTimeFormatter.ofPattern("dd/MM/yyyy"))
     );
+    private static final AuthorDto AUTHOR_DTO = new AuthorDto(
+        ID,
+        NAME,
+        DATE
+    );
 
     @Autowired
     private GraphQlTester graphQlTester;
 
     @MockBean
     private AuthorService authorService;
+
+    @MockBean
+    private AuthorDtoAdapter authorDtoAdapter;
+
+    @BeforeEach
+    void setUp() {
+        when(authorDtoAdapter.adapt(AUTHOR)).thenReturn(AUTHOR_DTO);
+    }
 
     @Test
     void createAuthor() {

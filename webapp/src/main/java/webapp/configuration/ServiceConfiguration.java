@@ -8,6 +8,7 @@ import repository.AuthorRepository;
 import repository.BookRepository;
 import service.AuthorService;
 import service.BookService;
+import webapp.controller.AuthorDtoAdapter;
 
 @Configuration
 public class ServiceConfiguration {
@@ -27,5 +28,10 @@ public class ServiceConfiguration {
             authorRepository,
             new BookIdProvider()
         );
+    }
+
+    @Bean
+    public AuthorDtoAdapter authorDtoAdapter() {
+        return new AuthorDtoAdapter();
     }
 }
