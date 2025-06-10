@@ -2,7 +2,6 @@ package webapp.controller;
 
 import data.Author;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.graphql.GraphQlTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -12,12 +11,15 @@ import service.AuthorService;
 import java.time.LocalDate;
 import java.util.UUID;
 
+import static org.mockito.Mockito.when;
+
 @GraphQlTest(AuthorGraphQLController.class)
 public class AuthorGraphQLControllerTest {
 
     private static final UUID ID = UUID.fromString("123e4567-e89b-12d3-a456-426614174000");
     private static final String NAME = "John";
     private static final String SURNAME = "Doe";
+
     private static final Author AUTHOR = new Author(ID, NAME, SURNAME, LocalDate.parse("1970-01-01"));
 
     @Autowired
@@ -28,8 +30,7 @@ public class AuthorGraphQLControllerTest {
 
     @Test
     void createAuthor() {
-        Mockito.when(authorService.createAuthor(NAME, SURNAME, "1970-01-01"))
-            .thenReturn(AUTHOR);
+        when(authorService.createAuthor(NAME, SURNAME, "1970-01-01")).thenReturn(AUTHOR);
 
         String mutation = """
                 mutation {
@@ -52,7 +53,7 @@ public class AuthorGraphQLControllerTest {
 
     @Test
     void getAuthorById() {
-        Mockito.when(authorService.getAuthorById(ID)).thenReturn(AUTHOR);
+        when(authorService.getAuthorById(ID)).thenReturn(AUTHOR);
 
         String query = String.format("""
                 query {
@@ -74,7 +75,7 @@ public class AuthorGraphQLControllerTest {
 
     @Test
     void getAuthorByName() {
-        Mockito.when(authorService.getAuthorByName(NAME)).thenReturn(AUTHOR);
+        when(authorService.getAuthorByName(NAME)).thenReturn(AUTHOR);
 
         String query = String.format("""
                 query {
