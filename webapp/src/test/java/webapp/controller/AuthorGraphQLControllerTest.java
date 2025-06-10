@@ -9,6 +9,7 @@ import org.springframework.graphql.test.tester.GraphQlTester;
 import service.AuthorService;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.UUID;
 
 import static org.mockito.Mockito.when;
@@ -19,8 +20,13 @@ public class AuthorGraphQLControllerTest {
     private static final UUID ID = UUID.fromString("123e4567-e89b-12d3-a456-426614174000");
     private static final String NAME = "John";
     private static final String SURNAME = "Doe";
-
-    private static final Author AUTHOR = new Author(ID, NAME, SURNAME, LocalDate.parse("1970-01-01"));
+    public static final String DATE = "01/01/1970";
+    private static final Author AUTHOR = new Author(
+        ID,
+        NAME,
+        SURNAME,
+        LocalDate.parse(DATE, DateTimeFormatter.ofPattern("dd/MM/yyyy"))
+    );
 
     @Autowired
     private GraphQlTester graphQlTester;
@@ -30,11 +36,11 @@ public class AuthorGraphQLControllerTest {
 
     @Test
     void createAuthor() {
-        when(authorService.createAuthor(NAME, SURNAME, "1970-01-01")).thenReturn(AUTHOR);
+        when(authorService.createAuthor(NAME, SURNAME, DATE)).thenReturn(AUTHOR);
 
         String mutation = """
                 mutation {
-                  createAuthor(name: "John", surname: "Doe", dateOfBirth: "1970-01-01") {
+                  createAuthor(name: "John", surname: "Doe", dateOfBirth: "01/01/1970") {
                     id
                     name
                     surname
