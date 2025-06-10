@@ -1,5 +1,6 @@
 package webapp.controller;
 
+import data.Author;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
@@ -9,6 +10,7 @@ import webapp.adapter.AuthorResponse;
 import webapp.adapter.AuthorResponseAdapter;
 
 import java.util.UUID;
+import java.util.function.Supplier;
 
 @Controller
 public class AuthorGraphQLController {
@@ -29,16 +31,20 @@ public class AuthorGraphQLController {
         @Argument String name,
         @Argument String dateOfBirth
     ) {
-        return authorResponseAdapter.adapt(authorService.createAuthor(name, dateOfBirth));
+        return adapt(() -> authorService.createAuthor(name, dateOfBirth));
     }
 
     @QueryMapping
     public AuthorResponse getAuthorById(@Argument UUID id) {
-        return authorResponseAdapter.adapt(authorService.getAuthorById(id));
+        return adapt(() -> authorService.getAuthorById(id));
     }
 
     @QueryMapping
     public AuthorResponse getAuthorByName(@Argument String name) {
-        return authorResponseAdapter.adapt(authorService.getAuthorByName(name));
+        return adapt(() -> authorService.getAuthorByName(name));
+    }
+
+    private AuthorResponse adapt(Supplier<Author> supplier) {
+        return authorResponseAdapter.adapt(supplier.get());
     }
 }

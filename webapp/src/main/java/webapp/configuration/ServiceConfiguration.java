@@ -31,7 +31,7 @@ public class ServiceConfiguration {
     }
 
     @Bean
-    public AuthorResponseAdapter authorDtoAdapter() {
+    public AuthorResponseAdapter authorResponseAdapter() {
         return new AuthorResponseAdapter();
     }
 }
