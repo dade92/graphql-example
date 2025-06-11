@@ -32,6 +32,7 @@ public class BookAuthorFieldResolver {
     @SchemaMapping(typeName = "Book", field = "author")
     public AuthorResponse author(Book book) {
         UUID authorId = bookRepository.getAuthor(book);
+        //TODO can I use the author service here instead?
         Author author = authorRepository
             .findById(authorId)
             .orElseThrow(() -> new AuthorNotFoundException("Author not found: " + authorId));
