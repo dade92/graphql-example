@@ -7,6 +7,8 @@ import org.springframework.stereotype.Controller;
 import repository.AuthorRepository;
 import repository.BookRepository;
 import service.AuthorNotFoundException;
+import webapp.adapter.AuthorResponse;
+import webapp.adapter.AuthorResponseAdapter;
 
 import java.util.UUID;
 
@@ -15,18 +17,25 @@ public class BookAuthorFieldResolver {
 
     private final AuthorRepository authorRepository;
     private final BookRepository bookRepository;
+    private final AuthorResponseAdapter authorResponseAdapter;
 
-    public BookAuthorFieldResolver(AuthorRepository authorRepository, BookRepository bookRepository) {
+    public BookAuthorFieldResolver(
+        AuthorRepository authorRepository,
+        BookRepository bookRepository,
+        AuthorResponseAdapter authorResponseAdapter
+    ) {
         this.authorRepository = authorRepository;
         this.bookRepository = bookRepository;
+        this.authorResponseAdapter = authorResponseAdapter;
     }
 
     @SchemaMapping(typeName = "Book", field = "author")
-    public Author author(Book book) {
+    public AuthorResponse author(Book book) {
         UUID authorId = bookRepository.getAuthor(book);
-        return authorRepository
+        Author author = authorRepository
             .findById(authorId)
             .orElseThrow(() -> new AuthorNotFoundException("Author not found: " + authorId));
+        return authorResponseAdapter.adapt(author);
     }
 }
 

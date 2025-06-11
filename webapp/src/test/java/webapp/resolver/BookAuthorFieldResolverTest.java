@@ -10,6 +10,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import repository.AuthorRepository;
 import repository.BookRepository;
 import service.AuthorNotFoundException;
+import webapp.adapter.AuthorResponse;
+import webapp.adapter.AuthorResponseAdapter;
 
 import java.time.LocalDate;
 import java.util.Optional;
@@ -24,6 +26,7 @@ public class BookAuthorFieldResolverTest {
 
     public static final UUID AUTHOR_ID = UUID.randomUUID();
     public static final Author AUTHOR = new Author(AUTHOR_ID, "Jane", LocalDate.of(1975, 8, 20));
+    public static final AuthorResponse AUTHOR_RESPONSE = new AuthorResponse(AUTHOR_ID, "Jane", "20/08/1975");
 
     @Mock
     private AuthorRepository authorRepository;
@@ -31,11 +34,14 @@ public class BookAuthorFieldResolverTest {
     @Mock
     private BookRepository bookRepository;
 
+    @Mock
+    private AuthorResponseAdapter authorResponseAdapter;
+
     private BookAuthorFieldResolver resolver;
 
     @BeforeEach
     public void setUp() {
-        resolver = new BookAuthorFieldResolver(authorRepository, bookRepository);
+        resolver = new BookAuthorFieldResolver(authorRepository, bookRepository, authorResponseAdapter);
     }
 
     @Test
@@ -43,10 +49,11 @@ public class BookAuthorFieldResolverTest {
         Book book = new Book(UUID.randomUUID(), "Book Title", "Desc");
         when(authorRepository.findById(AUTHOR_ID)).thenReturn(Optional.of(AUTHOR));
         when(bookRepository.getAuthor(book)).thenReturn(AUTHOR_ID);
+        when(authorResponseAdapter.adapt(AUTHOR)).thenReturn(AUTHOR_RESPONSE);
 
-        Author result = resolver.author(book);
+        AuthorResponse result = resolver.author(book);
 
-        assertEquals(AUTHOR, result);
+        assertEquals(AUTHOR_RESPONSE, result);
     }
 
 

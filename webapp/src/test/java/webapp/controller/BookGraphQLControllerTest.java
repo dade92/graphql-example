@@ -2,6 +2,7 @@ package webapp.controller;
 
 import model.Author;
 import model.Book;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.graphql.GraphQlTest;
@@ -11,6 +12,8 @@ import repository.AuthorRepository;
 import repository.BookRepository;
 import service.BookService;
 import utils.FixtureLoader;
+import webapp.adapter.AuthorResponse;
+import webapp.adapter.AuthorResponseAdapter;
 import webapp.resolver.BookAuthorFieldResolver;
 
 import java.time.LocalDate;
@@ -41,7 +44,17 @@ class BookGraphQLControllerTest {
     private AuthorRepository authorRepository;
 
     @MockBean
+    private AuthorResponseAdapter authorResponseAdapter;
+
+    @MockBean
     private BookRepository bookRepository;
+
+    @BeforeEach
+    void setUp() {
+        when(authorResponseAdapter.adapt(AUTHOR)).thenReturn(new AuthorResponse(
+            AUTHOR_ID, AUTHOR_NAME, "01/01/1970"
+        ));
+    }
 
     @Test
     void createBook() {
