@@ -1,5 +1,6 @@
 package webapp.controller;
 
+import model.Asset;
 import model.Author;
 import model.Book;
 import org.junit.jupiter.api.BeforeEach;
@@ -14,6 +15,7 @@ import service.BookService;
 import utils.FixtureLoader;
 import webapp.adapter.AuthorResponse;
 import webapp.adapter.AuthorResponseAdapter;
+import webapp.resolver.BookAssetsResolver;
 import webapp.resolver.BookAuthorFieldResolver;
 
 import java.time.LocalDate;
@@ -49,12 +51,16 @@ class BookGraphQLControllerTest {
     @MockBean
     private BookRepository bookRepository;
 
+    @MockBean
+    private BookAssetsResolver bookAssetsResolver;
+
     @BeforeEach
     void setUp() {
         when(authorResponseAdapter.adapt(AUTHOR)).thenReturn(new AuthorResponse(
             AUTHOR_ID, AUTHOR_NAME, "01/01/1970"
         ));
         when(bookRepository.getAuthor(BOOK)).thenReturn(AUTHOR_ID);
+        when(bookAssetsResolver.assets(BOOK)).thenReturn(List.of(new Asset("IMAGE", "url")));
     }
 
     @Test
@@ -73,13 +79,17 @@ class BookGraphQLControllerTest {
                       name
                       dateOfBirth
                     }
+                    assets {
+                        type
+                        url
+                    }
                   }
                 }
             """, TITLE, DESCRIPTION, AUTHOR_NAME);
 
         graphQlTester.document(query)
             .execute()
-            .path("createBook").matchesJson(
+            .path("createBook").matchesJsonStrictly(
                 FixtureLoader.readFile("/responses/book.json")
             );
     }
@@ -100,13 +110,17 @@ class BookGraphQLControllerTest {
                       name
                       dateOfBirth
                     }
+                    assets {
+                        type
+                        url
+                    }
                   }
                 }
             """, BOOK_ID);
 
         graphQlTester.document(query)
             .execute()
-            .path("getBookById").matchesJson(
+            .path("getBookById").matchesJsonStrictly(
                 FixtureLoader.readFile("/responses/book.json")
             );
     }
@@ -127,13 +141,17 @@ class BookGraphQLControllerTest {
                       name
                       dateOfBirth
                     }
+                    assets {
+                        type
+                        url
+                    }
                   }
                 }
             """, TITLE);
 
         graphQlTester.document(query)
             .execute()
-            .path("getBookByTitle").matchesJson(
+            .path("getBookByTitle").matchesJsonStrictly(
                 FixtureLoader.readFile("/responses/book.json")
             );
     }
@@ -154,13 +172,17 @@ class BookGraphQLControllerTest {
                       name
                       dateOfBirth
                     }
+                    assets {
+                        type
+                        url
+                    }
                   }
                 }
             """, AUTHOR_ID);
 
         graphQlTester.document(query)
             .execute()
-            .path("getBooksByAuthor").matchesJson(
+            .path("getBooksByAuthor").matchesJsonStrictly(
                 FixtureLoader.readFile("/responses/booksByAuthor.json")
             );
     }

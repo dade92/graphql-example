@@ -65,7 +65,7 @@ public class AuthorGraphQLControllerTest {
 
         graphQlTester.document(mutation)
             .execute()
-            .path("createAuthor").matchesJson(
+            .path("createAuthor").matchesJsonStrictly(
                 FixtureLoader.readFile("/responses/author.json")
             );
     }
@@ -86,7 +86,7 @@ public class AuthorGraphQLControllerTest {
 
         graphQlTester.document(query)
             .execute()
-            .path("getAuthorById").matchesJson(
+            .path("getAuthorById").matchesJsonStrictly(
                 FixtureLoader.readFile("/responses/author.json")
             );
     }
@@ -107,7 +107,7 @@ public class AuthorGraphQLControllerTest {
 
         graphQlTester.document(query)
             .execute()
-            .path("getAuthorByName").matchesJson(
+            .path("getAuthorByName").matchesJsonStrictly(
                 FixtureLoader.readFile("/responses/author.json")
             );
     }

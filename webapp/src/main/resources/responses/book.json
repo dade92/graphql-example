@@ -6,5 +6,11 @@
     "id": "123e4567-e89b-12d3-a456-426614174001",
     "name": "Homer",
     "dateOfBirth": "01/01/1970"
-  }
+  },
+  "assets": [
+    {
+      "type": "IMAGE",
+      "url": "url"
+    }
+  ]
 }
