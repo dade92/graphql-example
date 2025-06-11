@@ -54,13 +54,13 @@ class BookGraphQLControllerTest {
         when(authorResponseAdapter.adapt(AUTHOR)).thenReturn(new AuthorResponse(
             AUTHOR_ID, AUTHOR_NAME, "01/01/1970"
         ));
+        when(bookRepository.getAuthor(BOOK)).thenReturn(AUTHOR_ID);
     }
 
     @Test
     void createBook() {
         when(bookService.createBook(TITLE, DESCRIPTION, AUTHOR_NAME)).thenReturn(BOOK);
         when(authorRepository.findById(AUTHOR_ID)).thenReturn(Optional.of(AUTHOR));
-        when(bookRepository.getAuthor(BOOK)).thenReturn(AUTHOR_ID);
 
         String query = String.format("""
                 mutation {
@@ -88,7 +88,6 @@ class BookGraphQLControllerTest {
     void getBookByID() {
         when(bookService.findBookById(BOOK_ID)).thenReturn(BOOK);
         when(authorRepository.findById(AUTHOR_ID)).thenReturn(Optional.of(AUTHOR));
-        when(bookRepository.getAuthor(BOOK)).thenReturn(AUTHOR_ID);
 
         String query = String.format("""
                 query {
@@ -116,7 +115,6 @@ class BookGraphQLControllerTest {
     void getBookByName() {
         when(bookService.findBookByTitle(TITLE)).thenReturn(BOOK);
         when(authorRepository.findById(AUTHOR_ID)).thenReturn(Optional.of(AUTHOR));
-        when(bookRepository.getAuthor(BOOK)).thenReturn(AUTHOR_ID);
 
         String query = String.format("""
                 query {
@@ -144,7 +142,6 @@ class BookGraphQLControllerTest {
     void getBooksByAuthor() {
         when(bookService.findByAuthor(AUTHOR_ID)).thenReturn(List.of(BOOK, BOOK));
         when(authorRepository.findById(AUTHOR_ID)).thenReturn(Optional.of(AUTHOR));
-        when(bookRepository.getAuthor(BOOK)).thenReturn(AUTHOR_ID);
 
         String query = String.format("""
                 query {
