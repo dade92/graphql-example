@@ -7,8 +7,14 @@ type Book {
 }
 
 type Asset {
-    type: String!
+    type: AssetType!
     url: String!
+}
+
+enum AssetType {
+    IMAGE
+    VIDEO
+    AUDIO
 }
 
 extend type Query {
