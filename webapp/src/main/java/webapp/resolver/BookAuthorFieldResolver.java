@@ -15,6 +15,8 @@ import java.util.UUID;
 @Controller
 public class BookAuthorFieldResolver {
 
+    public static final String FIELD_NAME = "author";
+
     private final AuthorRepository authorRepository;
     private final BookRepository bookRepository;
     private final AuthorResponseAdapter authorResponseAdapter;
@@ -29,7 +31,7 @@ public class BookAuthorFieldResolver {
         this.authorResponseAdapter = authorResponseAdapter;
     }
 
-    @SchemaMapping(typeName = "Book", field = "author")
+    @SchemaMapping(typeName = "Book", field = FIELD_NAME)
     public AuthorResponse author(Book book) {
         UUID authorId = bookRepository.getAuthor(book);
         //TODO can I use the author service here instead?
