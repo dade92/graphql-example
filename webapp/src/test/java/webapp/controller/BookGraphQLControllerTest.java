@@ -8,6 +8,7 @@ import org.springframework.boot.test.autoconfigure.graphql.GraphQlTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.graphql.test.tester.GraphQlTester;
 import repository.AuthorRepository;
+import repository.BookRepository;
 import service.BookService;
 import utils.FixtureLoader;
 import webapp.resolver.BookAuthorFieldResolver;
@@ -39,10 +40,14 @@ class BookGraphQLControllerTest {
     @MockBean
     private AuthorRepository authorRepository;
 
+    @MockBean
+    private BookRepository bookRepository;
+
     @Test
     void createBook() {
         when(bookService.createBook(TITLE, DESCRIPTION, AUTHOR_NAME)).thenReturn(BOOK);
         when(authorRepository.findById(AUTHOR_ID)).thenReturn(Optional.of(AUTHOR));
+        when(bookRepository.getAuthor(BOOK)).thenReturn(AUTHOR_ID);
 
         String query = String.format("""
                 mutation {
@@ -70,6 +75,7 @@ class BookGraphQLControllerTest {
     void getBookByID() {
         when(bookService.findBookById(BOOK_ID)).thenReturn(BOOK);
         when(authorRepository.findById(AUTHOR_ID)).thenReturn(Optional.of(AUTHOR));
+        when(bookRepository.getAuthor(BOOK)).thenReturn(AUTHOR_ID);
 
         String query = String.format("""
                 query {
@@ -97,6 +103,7 @@ class BookGraphQLControllerTest {
     void getBookByName() {
         when(bookService.findBookByTitle(TITLE)).thenReturn(BOOK);
         when(authorRepository.findById(AUTHOR_ID)).thenReturn(Optional.of(AUTHOR));
+        when(bookRepository.getAuthor(BOOK)).thenReturn(AUTHOR_ID);
 
         String query = String.format("""
                 query {
@@ -124,6 +131,7 @@ class BookGraphQLControllerTest {
     void getBooksByAuthor() {
         when(bookService.findByAuthor(AUTHOR_ID)).thenReturn(List.of(BOOK, BOOK));
         when(authorRepository.findById(AUTHOR_ID)).thenReturn(Optional.of(AUTHOR));
+        when(bookRepository.getAuthor(BOOK)).thenReturn(AUTHOR_ID);
 
         String query = String.format("""
                 query {

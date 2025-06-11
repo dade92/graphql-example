@@ -42,15 +42,20 @@ public class BookAuthorFieldResolverTest {
     public void shouldReturnAuthorWhenFound() {
         Book book = new Book(UUID.randomUUID(), "Book Title", "Desc");
         when(authorRepository.findById(AUTHOR_ID)).thenReturn(Optional.of(AUTHOR));
+        when(bookRepository.getAuthor(book)).thenReturn(AUTHOR_ID);
 
         Author result = resolver.author(book);
 
         assertEquals(AUTHOR, result);
     }
 
+
+    //TODO add a test when the book repo fails?
+
     @Test
     public void shouldThrowWhenAuthorNotFound() {
         Book book = new Book(UUID.randomUUID(), "Another Book", "Desc");
+        when(bookRepository.getAuthor(book)).thenReturn(AUTHOR_ID);
         when(authorRepository.findById(AUTHOR_ID)).thenReturn(Optional.empty());
 
         AuthorNotFoundException exception = assertThrows(
