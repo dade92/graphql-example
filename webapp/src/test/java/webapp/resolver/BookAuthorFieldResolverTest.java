@@ -8,6 +8,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import repository.AuthorRepository;
+import repository.BookRepository;
 import service.AuthorNotFoundException;
 
 import java.time.LocalDate;
@@ -27,16 +28,19 @@ public class BookAuthorFieldResolverTest {
     @Mock
     private AuthorRepository authorRepository;
 
+    @Mock
+    private BookRepository bookRepository;
+
     private BookAuthorFieldResolver resolver;
 
     @BeforeEach
     public void setUp() {
-        resolver = new BookAuthorFieldResolver(authorRepository);
+        resolver = new BookAuthorFieldResolver(authorRepository, bookRepository);
     }
 
     @Test
     public void shouldReturnAuthorWhenFound() {
-        Book book = new Book(UUID.randomUUID(), "Book Title", "Desc", AUTHOR_ID);
+        Book book = new Book(UUID.randomUUID(), "Book Title", "Desc");
         when(authorRepository.findById(AUTHOR_ID)).thenReturn(Optional.of(AUTHOR));
 
         Author result = resolver.author(book);
@@ -46,7 +50,7 @@ public class BookAuthorFieldResolverTest {
 
     @Test
     public void shouldThrowWhenAuthorNotFound() {
-        Book book = new Book(UUID.randomUUID(), "Another Book", "Desc", AUTHOR_ID);
+        Book book = new Book(UUID.randomUUID(), "Another Book", "Desc");
         when(authorRepository.findById(AUTHOR_ID)).thenReturn(Optional.empty());
 
         AuthorNotFoundException exception = assertThrows(

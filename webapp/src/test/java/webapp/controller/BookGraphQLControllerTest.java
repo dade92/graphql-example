@@ -28,7 +28,7 @@ class BookGraphQLControllerTest {
     public static final String TITLE = "The Odyssey";
     public static final String DESCRIPTION = "Epic poem";
     public static final Author AUTHOR = new Author(AUTHOR_ID, AUTHOR_NAME, LocalDate.parse("1970-01-01"));
-    public static final Book BOOK = new Book(BOOK_ID, TITLE, DESCRIPTION, AUTHOR_ID);
+    public static final Book BOOK = new Book(BOOK_ID, TITLE, DESCRIPTION);
 
     @Autowired
     private GraphQlTester graphQlTester;

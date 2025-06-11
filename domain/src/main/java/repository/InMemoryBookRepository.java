@@ -16,8 +16,8 @@ public class InMemoryBookRepository implements BookRepository {
     private final Map<UUID, BookDto> books = new HashMap<>();
 
     @Override
-    public Book save(Book book, UUID id) {
-        books.put(book.id(), new BookDto(book.id(), book.title(), book.description(), book.authorId()));
+    public Book save(Book book, UUID authorId) {
+        books.put(book.id(), new BookDto(book.id(), book.title(), book.description(), authorId));
         return book;
     }
 
@@ -25,7 +25,7 @@ public class InMemoryBookRepository implements BookRepository {
     public Optional<Book> findById(UUID id) {
         BookDto bookDto = books.get(id);
         if (bookDto == null) return Optional.empty();
-        else return Optional.of(new Book(bookDto.id(), bookDto.title(), bookDto.description(), bookDto.authorId()));
+        else return Optional.of(new Book(bookDto.id(), bookDto.title(), bookDto.description()));
     }
 
     @Override
@@ -33,7 +33,7 @@ public class InMemoryBookRepository implements BookRepository {
         Optional<BookDto> bookDto = books.values().stream()
             .filter(book -> book.title().equalsIgnoreCase(title))
             .findFirst();
-        return bookDto.map(dto -> new Book(dto.id(), dto.title(), dto.description(), dto.authorId()));
+        return bookDto.map(dto -> new Book(dto.id(), dto.title(), dto.description()));
     }
 
     @Override
@@ -41,8 +41,13 @@ public class InMemoryBookRepository implements BookRepository {
         return books
             .values().stream()
             .filter(book -> book.authorId().equals(authorId))
-            .map(bookDto -> new Book(bookDto.id(), bookDto.title(), bookDto.description(), bookDto.authorId()))
+            .map(bookDto -> new Book(bookDto.id(), bookDto.title(), bookDto.description()))
             .collect(Collectors.toList());
+    }
+
+    @Override
+    public UUID getAuthor(Book book) {
+        return books.get(book.id()).authorId();
     }
 
 }

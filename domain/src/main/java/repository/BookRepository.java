@@ -14,4 +14,6 @@ public interface BookRepository {
     Optional<Book> findByTitle(String title);
 
     List<Book> findByAuthor(UUID author);
+
+    UUID getAuthor(Book book);
 }

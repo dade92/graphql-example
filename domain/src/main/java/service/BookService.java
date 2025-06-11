@@ -32,7 +32,7 @@ public class BookService {
         if (author.isEmpty()) {
             throw new AuthorNotFoundException("Author not found: " + authorName);
         }
-        Book book = new Book(bookIdProvider.getBookId(), title, description, author.get().id());
+        Book book = new Book(bookIdProvider.getBookId(), title, description);
         return bookRepository.save(book, author.get().id());
     }
 
