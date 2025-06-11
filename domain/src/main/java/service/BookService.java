@@ -33,7 +33,7 @@ public class BookService {
             throw new AuthorNotFoundException("Author not found: " + authorName);
         }
         Book book = new Book(bookIdProvider.getBookId(), title, description, author.get().id());
-        return bookRepository.save(book);
+        return bookRepository.save(book, author.get().id());
     }
 
     public Book findBookById(UUID id) {

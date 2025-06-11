@@ -7,7 +7,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface BookRepository {
-    Book save(Book book);
+    Book save(Book book, UUID id);
 
     Optional<Book> findById(UUID id);
 

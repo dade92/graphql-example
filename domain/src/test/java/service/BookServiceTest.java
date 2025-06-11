@@ -51,7 +51,7 @@ public class BookServiceTest {
 
         when(authorRepository.findByName(AUTHOR_NAME)).thenReturn(Optional.of(author));
         when(bookIdProvider.getBookId()).thenReturn(BOOK_ID);
-        when(bookRepository.save(expectedBook)).thenReturn(expectedBook);
+        when(bookRepository.save(expectedBook, AUTHOR_ID)).thenReturn(expectedBook);
 
         Book result = bookService.createBook(TITLE, DESCRIPTION, AUTHOR_NAME);
 
