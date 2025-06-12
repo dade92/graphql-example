@@ -13,15 +13,15 @@ import webapp.adapter.AuthorResponseAdapter;
 import java.util.UUID;
 
 @Controller
-public class BookAuthorFieldResolver {
+public class BookAuthorResolver {
 
-    public static final String FIELD_NAME = "author";
+    private static final String FIELD_NAME = "author";
 
     private final AuthorRepository authorRepository;
     private final BookRepository bookRepository;
     private final AuthorResponseAdapter authorResponseAdapter;
 
-    public BookAuthorFieldResolver(
+    public BookAuthorResolver(
         AuthorRepository authorRepository,
         BookRepository bookRepository,
         AuthorResponseAdapter authorResponseAdapter
@@ -34,7 +34,6 @@ public class BookAuthorFieldResolver {
     @SchemaMapping(typeName = "Book", field = FIELD_NAME)
     public AuthorResponse author(Book book) {
         UUID authorId = bookRepository.getAuthor(book);
-        //TODO can I use the author service here instead?
         Author author = authorRepository
             .findById(authorId)
             .orElseThrow(() -> new AuthorNotFoundException("Author not found: " + authorId));

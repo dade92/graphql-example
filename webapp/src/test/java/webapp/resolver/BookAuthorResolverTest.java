@@ -22,7 +22,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class BookAuthorFieldResolverTest {
+public class BookAuthorResolverTest {
 
     public static final UUID AUTHOR_ID = UUID.randomUUID();
     public static final Author AUTHOR = new Author(AUTHOR_ID, "Jane", LocalDate.of(1975, 8, 20));
@@ -37,11 +37,11 @@ public class BookAuthorFieldResolverTest {
     @Mock
     private AuthorResponseAdapter authorResponseAdapter;
 
-    private BookAuthorFieldResolver resolver;
+    private BookAuthorResolver resolver;
 
     @BeforeEach
     public void setUp() {
-        resolver = new BookAuthorFieldResolver(authorRepository, bookRepository, authorResponseAdapter);
+        resolver = new BookAuthorResolver(authorRepository, bookRepository, authorResponseAdapter);
     }
 
     @Test
