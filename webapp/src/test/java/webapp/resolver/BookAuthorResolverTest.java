@@ -27,6 +27,7 @@ public class BookAuthorResolverTest {
     public static final UUID AUTHOR_ID = UUID.randomUUID();
     public static final Author AUTHOR = new Author(AUTHOR_ID, "Jane", LocalDate.of(1975, 8, 20));
     public static final AuthorResponse AUTHOR_RESPONSE = new AuthorResponse(AUTHOR_ID, "Jane", "20/08/1975");
+    private static final Book BOOK = new Book(UUID.randomUUID(), "Book Title", "Desc");
 
     @Mock
     private AuthorRepository authorRepository;
@@ -45,29 +46,36 @@ public class BookAuthorResolverTest {
     }
 
     @Test
-    public void shouldReturnAuthorWhenFound() {
-        Book book = new Book(UUID.randomUUID(), "Book Title", "Desc");
+    public void resolveAuthor() {
         when(authorRepository.findById(AUTHOR_ID)).thenReturn(Optional.of(AUTHOR));
-        when(bookRepository.getAuthor(book)).thenReturn(AUTHOR_ID);
+        when(bookRepository.getAuthor(BOOK)).thenReturn(AUTHOR_ID);
         when(authorResponseAdapter.adapt(AUTHOR)).thenReturn(AUTHOR_RESPONSE);
 
-        AuthorResponse result = resolver.author(book);
+        AuthorResponse result = resolver.author(BOOK);
 
         assertEquals(AUTHOR_RESPONSE, result);
     }
 
+    @Test
+    void authorIdNotFound() {
+        when(bookRepository.getAuthor(BOOK)).thenReturn(null);
 
-    //TODO add a test when the book repo fails?
+        AuthorNotFoundException exception = assertThrows(
+            AuthorNotFoundException.class,
+            () -> resolver.author(BOOK)
+        );
+
+        assertEquals("Author not found: null", exception.getMessage());
+    }
 
     @Test
-    public void shouldThrowWhenAuthorNotFound() {
-        Book book = new Book(UUID.randomUUID(), "Another Book", "Desc");
-        when(bookRepository.getAuthor(book)).thenReturn(AUTHOR_ID);
+    public void authorNotFound() {
+        when(bookRepository.getAuthor(BOOK)).thenReturn(AUTHOR_ID);
         when(authorRepository.findById(AUTHOR_ID)).thenReturn(Optional.empty());
 
         AuthorNotFoundException exception = assertThrows(
             AuthorNotFoundException.class,
-            () -> resolver.author(book)
+            () -> resolver.author(BOOK)
         );
 
         assertEquals("Author not found: " + AUTHOR_ID, exception.getMessage());

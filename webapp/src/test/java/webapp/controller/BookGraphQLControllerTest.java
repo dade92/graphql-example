@@ -13,7 +13,6 @@ import repository.AssetsRepository;
 import repository.AuthorRepository;
 import repository.BookRepository;
 import service.BookService;
-import utils.FixtureLoader;
 import webapp.adapter.AuthorResponse;
 import webapp.adapter.AuthorResponseAdapter;
 import webapp.resolver.BookAssetsResolver;
@@ -25,10 +24,10 @@ import java.util.Optional;
 import java.util.UUID;
 
 import static org.mockito.Mockito.when;
+import static utils.FixtureLoader.readFile;
 
 @GraphQlTest({BookGraphQLController.class, BookAuthorResolver.class, BookAssetsResolver.class})
 class BookGraphQLControllerTest {
-
     private static final UUID BOOK_ID = UUID.fromString("123e4567-e89b-12d3-a456-426614174000");
     private static final UUID AUTHOR_ID = UUID.fromString("123e4567-e89b-12d3-a456-426614174001");
     private static final String AUTHOR_NAME = "Homer";
@@ -36,6 +35,7 @@ class BookGraphQLControllerTest {
     private static final String DESCRIPTION = "Epic poem";
     private static final Author AUTHOR = new Author(AUTHOR_ID, AUTHOR_NAME, LocalDate.parse("1970-01-01"));
     private static final Book BOOK = new Book(BOOK_ID, TITLE, DESCRIPTION);
+    private static final Asset ASSET = new Asset("IMAGE", "url");
 
     @Autowired
     private GraphQlTester graphQlTester;
@@ -61,7 +61,7 @@ class BookGraphQLControllerTest {
             AUTHOR_ID, AUTHOR_NAME, "01/01/1970"
         ));
         when(bookRepository.getAuthor(BOOK)).thenReturn(AUTHOR_ID);
-        when(assetsRepository.retrieveAssets(BOOK)).thenReturn(List.of(new Asset("IMAGE", "url")));
+        when(assetsRepository.retrieveAssets(BOOK)).thenReturn(List.of(ASSET));
     }
 
     @Test
@@ -91,7 +91,7 @@ class BookGraphQLControllerTest {
         graphQlTester.document(query)
             .execute()
             .path("createBook").matchesJsonStrictly(
-                FixtureLoader.readFile("/responses/book.json")
+                readFile("/responses/book.json")
             );
     }
 
@@ -122,7 +122,7 @@ class BookGraphQLControllerTest {
         graphQlTester.document(query)
             .execute()
             .path("getBookById").matchesJsonStrictly(
-                FixtureLoader.readFile("/responses/book.json")
+                readFile("/responses/book.json")
             );
     }
 
@@ -153,7 +153,7 @@ class BookGraphQLControllerTest {
         graphQlTester.document(query)
             .execute()
             .path("getBookByTitle").matchesJsonStrictly(
-                FixtureLoader.readFile("/responses/book.json")
+                readFile("/responses/book.json")
             );
     }
 
@@ -184,7 +184,7 @@ class BookGraphQLControllerTest {
         graphQlTester.document(query)
             .execute()
             .path("getBooksByAuthor").matchesJsonStrictly(
-                FixtureLoader.readFile("/responses/booksByAuthor.json")
+                readFile("/responses/booksByAuthor.json")
             );
     }
 }
