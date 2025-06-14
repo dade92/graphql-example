@@ -20,7 +20,6 @@ import static org.mockito.Mockito.when;
 
 @GraphQlTest(AuthorGraphQLController.class)
 public class AuthorGraphQLControllerTest {
-
     private static final UUID ID = UUID.fromString("123e4567-e89b-12d3-a456-426614174000");
     private static final String NAME = "John";
     public static final String DATE = "01/01/1970";
@@ -65,7 +64,7 @@ public class AuthorGraphQLControllerTest {
 
         graphQlTester.document(mutation)
             .execute()
-            .path("createAuthor").matchesJson(
+            .path("createAuthor").matchesJsonStrictly(
                 FixtureLoader.readFile("/responses/author.json")
             );
     }
@@ -86,7 +85,7 @@ public class AuthorGraphQLControllerTest {
 
         graphQlTester.document(query)
             .execute()
-            .path("getAuthorById").matchesJson(
+            .path("getAuthorById").matchesJsonStrictly(
                 FixtureLoader.readFile("/responses/author.json")
             );
     }
@@ -107,7 +106,7 @@ public class AuthorGraphQLControllerTest {
 
         graphQlTester.document(query)
             .execute()
-            .path("getAuthorByName").matchesJson(
+            .path("getAuthorByName").matchesJsonStrictly(
                 FixtureLoader.readFile("/responses/author.json")
             );
     }

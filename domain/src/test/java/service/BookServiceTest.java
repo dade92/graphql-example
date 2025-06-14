@@ -47,11 +47,11 @@ public class BookServiceTest {
     @Test
     public void createBook() {
         Author author = new Author(AUTHOR_ID, AUTHOR_NAME, null);
-        Book expectedBook = new Book(BOOK_ID, TITLE, DESCRIPTION, AUTHOR_ID);
+        Book expectedBook = new Book(BOOK_ID, TITLE, DESCRIPTION);
 
         when(authorRepository.findByName(AUTHOR_NAME)).thenReturn(Optional.of(author));
         when(bookIdProvider.getBookId()).thenReturn(BOOK_ID);
-        when(bookRepository.save(expectedBook)).thenReturn(expectedBook);
+        when(bookRepository.save(expectedBook, AUTHOR_ID)).thenReturn(expectedBook);
 
         Book result = bookService.createBook(TITLE, DESCRIPTION, AUTHOR_NAME);
 
@@ -59,7 +59,7 @@ public class BookServiceTest {
     }
 
     @Test
-    public void createBook_authorNotFound() {
+    public void createBookButAuthorNotFound() {
         when(authorRepository.findByName(AUTHOR_NAME)).thenReturn(Optional.empty());
 
         AuthorNotFoundException exception = assertThrows(
@@ -71,8 +71,8 @@ public class BookServiceTest {
     }
 
     @Test
-    public void findBookById_found() {
-        Book book = new Book(BOOK_ID, TITLE, DESCRIPTION, AUTHOR_ID);
+    public void findBookById() {
+        Book book = new Book(BOOK_ID, TITLE, DESCRIPTION);
         when(bookRepository.findById(BOOK_ID)).thenReturn(Optional.of(book));
 
         Book result = bookService.findBookById(BOOK_ID);
@@ -81,7 +81,7 @@ public class BookServiceTest {
     }
 
     @Test
-    public void findBookById_notFound() {
+    public void findBookByIdAuthorNotFound() {
         when(bookRepository.findById(BOOK_ID)).thenReturn(Optional.empty());
 
         Book result = bookService.findBookById(BOOK_ID);
@@ -90,8 +90,8 @@ public class BookServiceTest {
     }
 
     @Test
-    public void findBookByTitle_found() {
-        Book book = new Book(BOOK_ID, TITLE, DESCRIPTION, AUTHOR_ID);
+    public void findBookByTitle() {
+        Book book = new Book(BOOK_ID, TITLE, DESCRIPTION);
         when(bookRepository.findByTitle(TITLE)).thenReturn(Optional.of(book));
 
         Book result = bookService.findBookByTitle(TITLE);
@@ -100,7 +100,7 @@ public class BookServiceTest {
     }
 
     @Test
-    public void findBookByTitle_notFound() {
+    public void findBookByTitleAuthorNotFound() {
         when(bookRepository.findByTitle(TITLE)).thenReturn(Optional.empty());
 
         Book result = bookService.findBookByTitle(TITLE);
@@ -109,9 +109,9 @@ public class BookServiceTest {
     }
 
     @Test
-    public void findByAuthor_returnsBooks() {
-        Book book1 = new Book(UUID.randomUUID(), "Book 1", "Desc 1", AUTHOR_ID);
-        Book book2 = new Book(UUID.randomUUID(), "Book 2", "Desc 2", AUTHOR_ID);
+    public void findByAuthor() {
+        Book book1 = new Book(UUID.randomUUID(), "Book 1", "Desc 1");
+        Book book2 = new Book(UUID.randomUUID(), "Book 2", "Desc 2");
         List<Book> books = List.of(book1, book2);
 
         when(bookRepository.findByAuthor(AUTHOR_ID)).thenReturn(books);

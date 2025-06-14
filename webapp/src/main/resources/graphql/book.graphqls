@@ -3,6 +3,18 @@ type Book {
     title: String!
     description: String!
     author: Author!
+    assets: [Asset!]!
+}
+
+type Asset {
+    type: AssetType!
+    url: String!
+}
+
+enum AssetType {
+    IMAGE
+    VIDEO
+    AUDIO
 }
 
 extend type Query {
